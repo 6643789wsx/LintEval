@@ -1,0 +1,30 @@
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model} & $n$ & w/ supp. & rate & C++ & Python & Java\\
+\midrule
+GPT-5.2 & 485 & 2 & 0.41\% & 0/238 & 1/196 & 1/51 \\
+GPT-5.4-mini & 495 & 1 & 0.20\% & 0/242 & 0/202 & 1/51 \\
+DeepSeek-v3.2 & 483 & 1 & 0.21\% & 0/234 & 1/200 & 0/49 \\
+Qwen2.5-Coder-32B & 487 & 0 & 0.0\% & 0/239 & 0/199 & 0/49 \\
+Qwen2.5-Coder-7B & 487 & 0 & 0.0\% & 0/239 & 0/199 & 0/49 \\
+Qwen2.5-Coder-3B & 487 & 0 & 0.0\% & 0/239 & 0/199 & 0/49 \\
+Qwen2.5-Coder-0.5B & 487 & 1 & 0.21\% & 0/239 & 0/199 & 1/49 \\
+Llama-3.2-3B & 487 & 1 & 0.21\% & 0/239 & 1/199 & 0/49 \\
+Llama-3.2-1B & 487 & 1 & 0.21\% & 0/239 & 0/199 & 1/49 \\
+0.5B / A+L$\rightarrow$A$'$ & 497 & 1 & 0.20\% & 0/243 & 0/203 & 1/51 \\
+0.5B / Q$\rightarrow$A & 497 & 2 & 0.40\% & 0/243 & 0/203 & 2/51 \\
+0.5B / Q$\rightarrow$A$'$ & 497 & 1 & 0.20\% & 0/243 & 0/203 & 1/51 \\
+3B / A+L$\rightarrow$A$'$ & 497 & 1 & 0.20\% & 0/243 & 0/203 & 1/51 \\
+3B / Q$\rightarrow$A & 497 & 3 & 0.60\% & 0/243 & 1/203 & 2/51 \\
+3B / Q$\rightarrow$A$'$ & 497 & 1 & 0.20\% & 0/243 & 0/203 & 1/51 \\
+7B / A+L$\rightarrow$A$'$ & 497 & 2 & 0.40\% & 0/243 & 0/203 & 2/51 \\
+7B / Q$\rightarrow$A & 497 & 2 & 0.40\% & 0/243 & 0/203 & 2/51 \\
+7B / Q$\rightarrow$A$'$ & 497 & 2 & 0.40\% & 0/243 & 0/203 & 2/51 \\
+\bottomrule
+\end{tabular}
+\caption{Linter-gaming / suppression detection. We scan outputs for \texttt{NOLINT} (C++), \texttt{pylint: disable} (Python), and \texttt{NOPMD}/\texttt{@SuppressWarnings} (Java). Rates are negligible ($\le0.6\%$): models do not game the linter by inserting suppression comments.}
+\label{tab:suppression_detection}
+\end{table}

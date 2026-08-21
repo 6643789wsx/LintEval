@@ -1,0 +1,30 @@
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model} & $n$ & \textbf{inv1\textsubscript{count}} & \textbf{inv1\textsubscript{set}} & inv2 & inv3 & max$|$err$|$ set\\
+\midrule
+GPT-5.2 & 474 & 0 & 330 & 0 & 0 & 0.9286 \\
+GPT-5.4-mini & 483 & 0 & 337 & 0 & 0 & 0.9419 \\
+DeepSeek-v3.2 & 381 & 0 & 265 & 0 & 0 & 1.0 \\
+Qwen2.5-Coder-32B & 440 & 0 & 284 & 0 & 0 & 0.8929 \\
+Qwen2.5-Coder-7B & 321 & 0 & 190 & 0 & 0 & 1.0 \\
+Qwen2.5-Coder-3B & 314 & 0 & 187 & 0 & 0 & 1.0 \\
+Qwen2.5-Coder-0.5B & 298 & 0 & 183 & 0 & 0 & 1.0 \\
+Llama-3.2-3B & 238 & 0 & 135 & 0 & 0 & 1.0 \\
+Llama-3.2-1B & 216 & 0 & 126 & 0 & 0 & 1.0 \\
+0.5B / A+L$\rightarrow$A$'$ & 387 & 0 & 246 & 0 & 0 & 0.9259 \\
+0.5B / Q$\rightarrow$A & 363 & 0 & 41 & 0 & 0 & 0.8479 \\
+0.5B / Q$\rightarrow$A$'$ & 403 & 0 & 114 & 0 & 0 & 0.9099 \\
+3B / A+L$\rightarrow$A$'$ & 453 & 0 & 308 & 0 & 0 & 0.9286 \\
+3B / Q$\rightarrow$A & 465 & 0 & 53 & 0 & 0 & 0.5 \\
+3B / Q$\rightarrow$A$'$ & 334 & 0 & 199 & 0 & 0 & 1.0 \\
+7B / A+L$\rightarrow$A$'$ & 457 & 0 & 310 & 0 & 0 & 0.907 \\
+7B / Q$\rightarrow$A & 470 & 0 & 188 & 0 & 0 & 0.8479 \\
+7B / Q$\rightarrow$A$'$ & 472 & 0 & 278 & 0 & 0 & 0.8929 \\
+\bottomrule
+\end{tabular}
+\caption{Metric-consistency audit (per sample). \textbf{inv1\textsubscript{count}}: $\mathrm{Reduction}=\mathrm{FixedRate_{count}}-\mathrm{NewRate}$ with the count-consistent fixed $=O{-}R{+}N$ that the pipeline now uses for LinePerFix@P (holds exactly, 0 violations). \textbf{inv1\textsubscript{set}}: same identity using the legacy set-based \texttt{lpm\_p\_fixed\_count} still stored in the result JSONs; its frequent violations document the original inconsistency (set-based vs.\ count-based Fixed) that is now corrected in \texttt{compute\_fixed\_messages} and the table pipeline. inv2/inv3 ($\mathrm{Reduction}\ge{-}\mathrm{NewRate},\le1$) always hold.}
+\label{tab:metric_invariant_audit}
+\end{table}

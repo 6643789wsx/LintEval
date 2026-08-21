@@ -1,0 +1,23 @@
+% ============================================================
+% Table: Failure Case Classification
+% ============================================================
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{l ccc}
+\toprule
+\textbf{Failure Category} & \textbf{GPT-5.4-mini} & \textbf{DeepSeek-v3.2} & \textbf{Qwen2.5-Coder-7B} \\
+\midrule
+Syntax/Type/Runtime Error & 11 (23.9\%) & 11 (22.9\%) & 10 (20.8\%) \\
+Changed Algorithmic Logic & 32 (69.6\%) & 18 (37.5\%) & 9 (18.8\%) \\
+Changed I/O Protocol & 0 (0.0\%) & 0 (0.0\%) & 0 (0.0\%) \\
+Over-Broad Rewrite & 3 (6.5\%) & 11 (22.9\%) & 16 (33.3\%) \\
+Incomplete Local Edit & 0 (0.0\%) & 1 (2.1\%) & 3 (6.2\%) \\
+Formatting-Only (No Alert Resolution) & 0 (0.0\%) & 7 (14.6\%) & 10 (20.8\%) \\
+\midrule
+\textbf{Total Sampled} & 46 & 48 & 48 \\
+\bottomrule
+\end{tabular}
+\caption{Failure case classification. For each model, up to 50 failed revisions are sampled and manually categorized by root cause. Categories are defined as: \textit{Syntax/Type/Runtime Error}: code fails to compile or throws runtime errors; \textit{Changed Algorithmic Logic}: code compiles but changes the program's behavior; \textit{Changed I/O Protocol}: input/output handling is modified; \textit{Over-Broad Rewrite}: excessive changes unrelated to linter alerts; \textit{Incomplete Local Edit}: makes small changes but fails to resolve alerts; \textit{Formatting-Only}: only whitespace or formatting changes, no alert resolution.}
+\label{tab:failure_categories}
+\end{table*}

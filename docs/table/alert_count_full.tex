@@ -1,0 +1,30 @@
+% ============================================================
+% Placement: Appendix (Section A - Full Results)
+% ============================================================
+% A2: Full Alert Count Impact (All Four Metrics)
+\begin{table*}[t]
+\centering
+\small
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccccccccccccccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{1 alert}} & \multicolumn{4}{c}{\textbf{2--5 alerts}} & \multicolumn{4}{c}{\textbf{6--10 alerts}} & \multicolumn{4}{c}{\textbf{$>$10 alerts}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-13} \cmidrule(lr){14-17}
+\textbf{Model} & Pass@1 & Reduction@P & New@P & LinePerFix@P & Pass@1 & Reduction@P & New@P & LinePerFix@P & Pass@1 & Reduction@P & New@P & LinePerFix@P & Pass@1 & Reduction@P & New@P & LinePerFix@P \\
+\midrule
+GPT-5.2 & 79.5\% & 64.5\% & 35.5\% & 21.9 & 71.7\% & 82.5\% & 10.0\% & 9.8 & \textbf{60.0\%} & 87.2\% & 8.7\% & 7.8 & \textbf{64.5\%} & 89.0\% & 6.3\% & 6.0 \\
+GPT-5.4-mini & \textbf{82.1\%} & 62.5\% & 34.4\% & 12.9 & \textbf{75.1\%} & \textbf{83.0\%} & \textbf{8.1\%} & 6.8 & \textbf{60.0\%} & \textbf{88.7\%} & 6.9\% & \textbf{5.7} & 63.9\% & \textbf{92.1\%} & \textbf{4.7\%} & 4.8 \\
+\midrule
+DeepSeek-v3.2 & 61.5\% & \textbf{69.4\%} & 13.9\% & 16.0 & 63.0\% & 68.1\% & 9.5\% & \textbf{6.5} & 54.2\% & 75.5\% & 4.6\% & 6.8 & 53.6\% & 73.6\% & 6.4\% & \textbf{4.7} \\
+Qwen2.5-Coder-32B & \textbf{82.1\%} & 46.9\% & 40.6\% & \textbf{11.2} & 70.5\% & 61.4\% & 16.6\% & 6.6 & 55.0\% & 69.4\% & 8.3\% & 5.8 & 52.4\% & 53.1\% & 5.7\% & 5.2 \\
+Qwen2.5-Coder-0.5B & 59.0\% & 22.9\% & 11.4\% & 30.1 & 55.5\% & 8.7\% & 12.7\% & 15.5 & 46.7\% & -2.8\% & 13.6\% & 24.3 & 41.0\% & -4.1\% & 8.9\% & 25.6 \\
+Qwen2.5-Coder-3B & 59.0\% & 48.6\% & \textbf{8.6\%} & 21.1 & 54.9\% & 33.0\% & 11.9\% & 9.2 & 51.7\% & 15.5\% & 10.6\% & 13.3 & 47.6\% & 0.1\% & 11.3\% & 21.9 \\
+Qwen2.5-Coder-7B & 59.0\% & 62.9\% & \textbf{8.6\%} & 15.1 & 54.9\% & 51.1\% & 10.5\% & 7.3 & 48.3\% & 27.4\% & 10.7\% & 10.5 & 53.0\% & 17.0\% & 13.8\% & 9.0 \\
+Llama-3.2-1B & 43.6\% & 25.9\% & 11.1\% & 33.2 & 39.3\% & 14.4\% & 11.5\% & 16.9 & 25.8\% & 4.0\% & \textbf{4.0\%} & 13.4 & 31.3\% & -4.8\% & 17.0\% & 20.9 \\
+Llama-3.2-3B & 56.4\% & 58.8\% & 14.7\% & 17.6 & 46.2\% & 30.5\% & 22.2\% & 11.3 & 32.5\% & 18.5\% & 18.8\% & 11.5 & 31.3\% & 15.2\% & 9.0\% & 9.9 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Full alert-count breakdown on LintEval-Lite. All four metrics are reported for each alert-count bin. Best results per column are in \textbf{bold}.}
+\label{app:alert_count_full}
+\end{table*}

@@ -1,0 +1,27 @@
+\begin{table}[t]
+\centering
+\small
+\begin{adjustbox}{max width=\columnwidth}
+\begin{tabular}{l c c c}
+\toprule
+\textbf{Benchmark} & \textbf{Initial Functionality} & \textbf{Multilingual} & \textbf{Lint Alerts} \\
+\midrule
+\multicolumn{4}{l}{\textit{Code Generation}} \\
+HumanEval    & None & \xmark & \xmark \\
+MBPP         & None & \xmark & \xmark \\
+CodeContests & None & \cmark & \xmark \\
+\midrule
+\multicolumn{4}{l}{\textit{Bug Repair}} \\
+Defects4J    & Incorrect    & \xmark & \xmark \\
+QuixBugs     & Incorrect    & \xmark & \xmark \\
+DebugBench   & Incorrect    & \xmark & \xmark \\
+\midrule
+\multicolumn{4}{l}{\textit{Code Refactoring}} \\
+RefactorBench & Correct     & \xmark & \xmark \\
+\rowcolor[gray]{0.9} \textbf{LintEval (Ours)} & \textbf{Correct} & \textbf{\cmark} & \textbf{\cmark} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Comparison with existing benchmarks.}
+\label{tab:benchmark_comparison}
+\end{table}

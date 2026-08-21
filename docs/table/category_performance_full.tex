@@ -1,0 +1,28 @@
+% ============================================================
+% Table: Full Category-wise Performance (Appendix)
+% ============================================================
+\begin{table*}[t]
+\centering
+\small
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccccccccccccccc}
+\toprule
+ & \multicolumn{3}{c}{\textbf{Error-prone}} & \multicolumn{3}{c}{\textbf{Performance}} & \multicolumn{3}{c}{\textbf{Refactor}} & \multicolumn{3}{c}{\textbf{Style}} & \multicolumn{3}{c}{\textbf{Other}} \\
+\textbf{Model} & Pass@1 & Reduction@P & New@P & Pass@1 & Reduction@P & New@P & Pass@1 & Reduction@P & New@P & Pass@1 & Reduction@P & New@P & Pass@1 & Reduction@P & New@P \\
+\midrule
+GPT-5.2 & 63.3\% & 83.0\% & 0.7\% & 65.8\% & 88.9\% & 1.3\% & \textbf{62.0\%} & 59.3\% & 10.5\% & 65.8\% & 91.4\% & \textbf{0.0\%} & 58.0\% & \textbf{100.0\%} & \textbf{0.0\%} \\
+GPT-5.4-mini & \textbf{64.9\%} & \textbf{84.4\%} & \textbf{0.0\%} & \textbf{66.7\%} & \textbf{90.3\%} & \textbf{0.2\%} & 60.8\% & \textbf{72.5\%} & 11.0\% & \textbf{66.9\%} & \textbf{93.0\%} & \textbf{0.0\%} & 62.0\% & \textbf{100.0\%} & \textbf{0.0\%} \\
+\midrule
+DeepSeek-v3.2 & 59.6\% & 46.1\% & \textbf{0.0\%} & 53.9\% & 77.6\% & 0.7\% & 53.0\% & 53.6\% & 10.7\% & 55.5\% & 79.7\% & 1.0\% & 64.0\% & 98.4\% & \textbf{0.0\%} \\
+Qwen2.5-Coder-32B & 61.3\% & 33.3\% & 1.3\% & 60.2\% & 73.5\% & 4.2\% & 51.9\% & 55.6\% & 3.7\% & 61.3\% & 59.0\% & 0.5\% & 61.7\% & 95.3\% & \textbf{0.0\%} \\
+Qwen2.5-Coder-0.5B & 54.7\% & 3.5\% & \textbf{0.0\%} & 52.1\% & -0.4\% & 0.8\% & 49.4\% & 0.6\% & 1.8\% & 46.5\% & -0.4\% & 2.2\% & 61.7\% & 3.0\% & \textbf{0.0\%} \\
+Qwen2.5-Coder-3B & 60.8\% & 1.3\% & 0.8\% & 53.1\% & 17.4\% & 1.2\% & 49.4\% & 20.7\% & \textbf{1.7\%} & 50.3\% & 15.1\% & 1.4\% & \textbf{66.0\%} & 17.4\% & \textbf{0.0\%} \\
+Qwen2.5-Coder-7B & 63.5\% & 12.8\% & 0.3\% & 53.1\% & 53.5\% & 0.7\% & 52.6\% & 11.3\% & 19.1\% & 51.5\% & 28.1\% & 1.2\% & 61.7\% & 52.3\% & \textbf{0.0\%} \\
+Llama-3.2-1B & 39.2\% & 6.8\% & 0.8\% & 33.2\% & 6.8\% & 2.0\% & 35.3\% & 10.1\% & 3.9\% & 32.6\% & 9.2\% & 3.0\% & 40.4\% & 8.8\% & \textbf{0.0\%} \\
+Llama-3.2-3B & 44.2\% & 4.9\% & 1.7\% & 38.9\% & 35.5\% & 21.9\% & 32.7\% & 12.4\% & 19.5\% & 36.0\% & 19.7\% & 3.8\% & 55.3\% & 50.0\% & 2.3\% \\
+\bottomrule
+\end{tabular}
+}
+\caption{Full category-wise performance on LintEval-Lite. Pass@1 is computed over samples having $\geq 1$ alert in the corresponding category; Reduction@P and New@P use corpus-level aggregation over passed instances.}
+\label{app:category_performance_full}
+\end{table*}

@@ -1,0 +1,25 @@
+# Dataset configuration for CodeContests+ linter revision benchmark
+
+# Input data
+raw_data_path: "data/raw/part-00000-of-00010.jsonl"  # or .json for single problem
+
+# Split ratios (by problem_id, NOT by sample_id)
+train_ratio: 0.7
+valid_ratio: 0.15
+test_ratio: 0.15
+random_seed: 42
+
+# Sampling
+max_submissions_per_problem: 1  # How many correct submissions to sample per problem per language
+languages: ["cpp", "py3", "java"]  # Process all three languages
+
+# Filtering thresholds
+min_loc: 5                      # Minimum lines of code
+max_loc: 500                    # Maximum lines of code
+max_messages: 200               # Maximum linter messages (filter extremely noisy)
+min_messages: 1                 # Minimum linter messages (filter already-clean code)
+
+# Revision pair filtering (for training data)
+max_line_churn: 0.8             # Maximum line churn ratio
+max_new_messages: 10            # Maximum new messages introduced
+min_mrr: -0.5                   # Minimum MRR (negative = allow some regression)

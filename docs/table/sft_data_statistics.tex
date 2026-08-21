@@ -1,0 +1,20 @@
+% SFT Data Statistics
+% Statistics of the training data for SFT experiments
+\begin{table}[t]
+\centering
+\caption{Statistics of SFT training data. This table summarizes the revision-format training split only; it is kept in the appendix because the main text now focuses on the benchmark and evaluation tables.}
+\label{app:sft_data_statistics}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Language} & \textbf{\#Samples} & \textbf{Avg. Messages} & \textbf{Rule Types} & \textbf{Linter} \\
+\midrule
+C++ & 538 & 10.4 & 89 & clang-tidy \\
+Python & 416 & 8.9 & 72 & Pylint \\
+Java & 242 & 18.8 & 63 & PMD \\
+\midrule
+Total & 1,196 & 11.6 & 224 & -- \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

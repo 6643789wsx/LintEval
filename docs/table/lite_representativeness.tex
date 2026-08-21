@@ -1,0 +1,33 @@
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Metric} & \textbf{LintEval (Full)} & \textbf{LintEval-Lite} \\
+\midrule
+Instances & 13061 & 498 \\
+Total lint alerts & 171,662 & 6,302 \\
+Unique problems & 3999 & 426 \\
+Avg.\ LOC & 61.0 & 62.5 \\
+Avg.\ alerts / instance & 13.1 & 12.7 \\
+  cpp instances & 6165/13061 (47.2\%) & 244/498 (49.0\%) \\
+  py3 instances & 4221/13061 (32.3\%) & 203/498 (40.8\%) \\
+  java instances & 2675/13061 (20.5\%) & 51/498 (10.2\%) \\
+ &  &  \\
+\multicolumn{3}{c}{\textbf{Alert category distribution}}\\ &  &  \\
+  error-prone & 18434/171662 (10.7\%) & 839/6302 (13.3\%) \\
+  performance & 17776/171662 (10.4\%) & 681/6302 (10.8\%) \\
+  refactor & 17977/171662 (10.5\%) & 419/6302 (6.6\%) \\
+  style & 115458/171662 (67.3\%) & 4256/6302 (67.5\%) \\
+  other & 2017/171662 (1.2\%) & 107/6302 (1.7\%) \\
+ &  &  \\
+\multicolumn{3}{c}{\textbf{Alert-density bins}}\\ &  &  \\
+  1 alert & 777/13061 (5.9\%) & 39/498 (7.8\%) \\
+  2--5 alerts & 4285/13061 (32.8\%) & 173/498 (34.7\%) \\
+  6--10 alerts & 3013/13061 (23.1\%) & 120/498 (24.1\%) \\
+  $>$10 alerts & 4986/13061 (38.2\%) & 166/498 (33.3\%) \\
+\bottomrule
+\end{tabular}
+\caption{Representativeness of \textbf{LintEval-Lite} (498 instances) against the full \textbf{LintEval} benchmark (13,061 instances). The Lite split preserves the language, alert-category, and alert-density distributions of the full benchmark. All expensive model evaluations in the paper are conducted on Lite.}
+\label{tab:lite_representativeness}
+\end{table}

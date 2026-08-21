@@ -1,0 +1,21 @@
+% ============================================================
+% Placement: Appendix (supports Section 4.4 mechanism analysis)
+% ============================================================
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{l rrrr rr r}
+\toprule
+& \multicolumn{4}{c}{\textbf{Fixed alerts by category}} & \textbf{\#Fix} & \textbf{\#New} & \textbf{Fix/New} \\
+\cmidrule(lr){2-5}
+\textbf{Format (3B)} & E-prone & Perf & Refac & Style & Total & Actual & Ratio \\
+\midrule
+Base & 8 & 47 & 39 & 254 & 360 & 261 & 1.4$\times$ \\
+A+L$\rightarrow$A$'$ & 229 & 241 & 138 & 1803 & 2453 & 189 & 13.0$\times$ \\
+Q$\rightarrow$A & 6 & 20 & 14 & 237 & 281 & 98 & 2.9$\times$ \\
+Q$\rightarrow$A$'$ & 12 & 104 & 14 & 167 & 304 & 585 & 0.5$\times$ \\
+\bottomrule
+\end{tabular}
+\caption{Per-category alert breakdown for 3B SFT models (Qwen2.5-Coder-3B). \emph{Fixed} counts denote original alerts removed per category. \#New is the total newly introduced alerts from the evaluation pipeline. The ``Other'' category is omitted ($<3\%$ of alerts). Fix/New Ratio shows how many alerts are fixed per new alert introduced.}
+\label{app:sft_alert_category_breakdown}
+\end{table*}

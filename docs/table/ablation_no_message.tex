@@ -1,0 +1,23 @@
+% ============================================================
+% Ablation: With-Alerts vs Without-Alerts
+% ============================================================
+\begin{table*}[t]
+\centering
+\small
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lcccccccccc}
+\toprule
+ & \multicolumn{5}{c}{\textbf{With Alerts}} & \multicolumn{5}{c}{\textbf{No Alerts}} \\
+\cmidrule(lr){2-6} \cmidrule(lr){7-11}
+\textbf{Model} & Pass@1 & Reduction@P & New@P & $\Delta$Line@P & LinePerFix@P & Pass@1 & Reduction@P & New@P & $\Delta$Line@P & LinePerFix@P \\
+\midrule
+GPT-5.4-mini & 68.3 & 90.4 & 5.6 & 60.2 & 5.2 & 95.4 \textcolor{green!70!black}{$\uparrow$} & 45.4 \textcolor{red!70!black}{$\downarrow$} & 46.8 \textcolor{red!70!black}{$\uparrow$} & 69.0 \textcolor{red!70!black}{$\uparrow$} & 5.8 \textcolor{red!70!black}{$\uparrow$} \\
+DeepSeek-v3.2 & 57.6 & 73.0 & 6.7 & 45.4 & 5.5 & 62.5 \textcolor{green!70!black}{$\uparrow$} & 49.9 \textcolor{red!70!black}{$\downarrow$} & 10.1 \textcolor{red!70!black}{$\uparrow$} & 81.6 \textcolor{red!70!black}{$\uparrow$} & 11.6 \textcolor{red!70!black}{$\uparrow$} \\
+Qwen2.5-Coder-0.5B & 48.8 & -1.2 & 10.5 & 17.2 & 21.5 & 60.0 \textcolor{green!70!black}{$\uparrow$} & -1.0 \textcolor{green!70!black}{$\uparrow$} & 3.4 \textcolor{green!70!black}{$\downarrow$} & 10.5 \textcolor{green!70!black}{$\downarrow$} & 51.2 \textcolor{red!70!black}{$\uparrow$} \\
+Qwen2.5-Coder-7B & 53.0 & 24.7 & 12.7 & 32.5 & 8.9 & 64.5 \textcolor{green!70!black}{$\uparrow$} & 9.2 \textcolor{red!70!black}{$\downarrow$} & 3.6 \textcolor{green!70!black}{$\downarrow$} & 31.0 \textcolor{green!70!black}{$\downarrow$} & 20.6 \textcolor{red!70!black}{$\uparrow$} \\
+\bottomrule
+\end{tabular}
+}
+\caption{Ablation study on the impact of lint alert conditioning. \textit{With Alerts}: full input with lint diagnostics; \textit{No Alerts}: input without lint alert messages. Arrows in the No Alerts columns compare against the With Alerts baseline: \textcolor{green!70!black}{$\uparrow$}/\textcolor{green!70!black}{$\downarrow$} = improvement; \textcolor{red!70!black}{$\uparrow$}/\textcolor{red!70!black}{$\downarrow$} = degradation.}
+\label{tab:ablation_alerts}
+\end{table*}

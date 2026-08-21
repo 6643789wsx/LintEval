@@ -1,0 +1,13 @@
+{
+  "total_samples": 498,
+  "languages": {
+    "cpp": 244,
+    "py3": 203,
+    "java": 51
+  },
+  "avg_loc": 62.5,
+  "median_loc": 41,
+  "total_messages": 6302,
+  "unique_message_types": 190,
+  "avg_messages_per_sample": 12.7
+}

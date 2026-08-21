@@ -1,0 +1,4 @@
+# Optional: if you want to track the full dataset (233 MB) with Git LFS,
+# remove data/linteval_full.jsonl from .gitignore, then run:
+#   git lfs install && git lfs track "data/linteval_full.jsonl"
+

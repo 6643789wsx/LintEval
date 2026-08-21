@@ -1,0 +1,40 @@
+# clang-tidy configuration for C++ linter message extraction
+
+# clang-tidy binary path (also honored: CLANG_TIDY_BIN env var / PATH)
+clang_tidy_bin: "clang-tidy"
+
+# Default checks to enable
+checks:
+  - "bugprone-*"
+  - "performance-*"
+  - "modernize-use-nullptr"
+  - "modernize-use-emplace"
+  - "modernize-loop-convert"
+  - "readability-braces-around-statements"
+  - "readability-redundant-*"
+  - "readability-simplify-boolean-expr"
+
+# Checks to explicitly avoid (competitive programming style)
+disabled_checks:
+  - "readability-identifier-naming"
+  - "cppcoreguidelines-avoid-magic-numbers"
+  - "hicpp-signed-bitwise"
+  - "llvm-header-guard"
+  - "google-*"
+  - "fuchsia-*"
+  - "cppcoreguidelines-*"
+
+# Compilation flags
+cpp_standard: "c++17"
+optimization: "-O2"
+
+# Timeouts
+clang_tidy_timeout: 30    # seconds
+compile_timeout: 30        # seconds
+run_timeout: 5             # seconds per test case
+
+# clang-tidy header filter (empty = default, only user code)
+header_filter: ""
+
+# testlib.h include path (relative to repo root; also honored: TESTLIB_INCLUDE env var)
+testlib_include: "tools"

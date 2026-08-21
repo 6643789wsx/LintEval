@@ -1,0 +1,24 @@
+# DeepSeek API configuration (EXAMPLE - copy to deepseek_config.yaml)
+# DO NOT commit your actual API key!
+
+# These can also be set via environment variables (preferred):
+# export DEEPSEEK_API_KEY="your_api_key_here"
+# export DEEPSEEK_BASE_URL="https://chat.noc.pku.edu.cn/v1"
+# export DEEPSEEK_MODEL="deepseek-v3.2-128k"
+
+api_key: "${DEEPSEEK_API_KEY}"      # Use env var
+base_url: "https://chat.noc.pku.edu.cn/v1"
+model: "deepseek-v3.2-128k"
+
+# Generation parameters
+temperature: 0.2
+max_tokens: 8192
+top_p: 0.95
+
+# Retry settings
+max_retries: 3
+retry_delay: 5      # seconds
+request_timeout: 120 # seconds
+
+# Concurrency
+num_workers: 4       # parallel API calls

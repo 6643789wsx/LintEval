@@ -1,0 +1,36 @@
+% ============================================================
+% Table: Diagnostic Grounding Ablation
+% ============================================================
+\begin{table*}[t]
+\centering
+\small
+\resizebox{\linewidth}{!}{
+\begin{tabular}{ll ccccc}
+\toprule
+\textbf{Model} & \textbf{Prompt Variant} & \textbf{Pass@1} & \textbf{Reduction@P} & \textbf{New@P} & \textbf{$\Delta$Line@P} & \textbf{LinePerFix@P} \\
+\midrule
+\multirow{6}{*}{GPT-5.4-mini} & Full (Standard) & 68.3\% & \textbf{90.4\%} & 5.6\% & 60.2 & 5.2 \\
+ & No Alerts & \textbf{95.4\%} & 45.4\% & 46.8\% & 69.0 & 5.8 \\
+ & Shuffled Alerts & 67.7\% & 46.2\% & \textbf{4.5\%} & \textbf{41.2} & 7.1 \\
+ & Rule-Only & 67.3\% & 70.1\% & 5.6\% & 45.5 & 5.4 \\
+ & Message-Only & 67.3\% & 77.8\% & 5.0\% & 46.3 & \textbf{5.1} \\
+ & Location-Only & 66.5\% & 47.0\% & 5.3\% & 49.5 & 8.2 \\
+\midrule
+\multirow{5}{*}{DeepSeek-v3.2} & Full (Standard) & 57.6\% & 73.0\% & 6.7\% & 45.4 & 5.5 \\
+ & No Alerts & 62.5\% & 49.9\% & 10.1\% & 81.6 & 11.6 \\
+ & Shuffled Alerts & \textbf{68.3\%} & 40.3\% & \textbf{3.5\%} & \textbf{29.6} & 5.9 \\
+ & Rule-Only & 67.1\% & 71.1\% & 5.4\% & 39.4 & 4.5 \\
+ & Message-Only & 66.1\% & \textbf{77.4\%} & 5.2\% & 42.0 & \textbf{4.4} \\
+\midrule
+\multirow{6}{*}{Qwen2.5-Coder-7B} & Full (Standard) & 53.0\% & 24.7\% & 12.7\% & 32.5 & 8.9 \\
+ & No Alerts & 64.5\% & 9.2\% & 3.6\% & 31.0 & 20.6 \\
+ & Shuffled Alerts & \textbf{68.1\%} & 6.5\% & 3.6\% & 22.6 & 19.4 \\
+ & Rule-Only & 66.5\% & 17.8\% & 5.4\% & 27.9 & 12.0 \\
+ & Message-Only & 65.5\% & \textbf{27.1\%} & 7.3\% & 28.8 & \textbf{8.7} \\
+ & Location-Only & 66.5\% & 5.5\% & \textbf{3.1\%} & \textbf{20.8} & 24.0 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Diagnostic grounding ablation: how different representations of linter alerts affect model performance. \textit{Full (Standard)}: complete alerts with rule ID, message text, and line number. \textit{Shuffled Alerts}: each sample receives alerts from a different file of the same language, testing whether the model grounds specific diagnostics. \textit{Rule-Only}: rule ID only, no diagnostic description. \textit{Message-Only}: diagnostic text without line numbers. \textit{Location-Only}: line numbers and severity only, no rule ID or message. \textbf{Bold} marks the best value per metric per model.}
+\label{tab:grounding_ablation}
+\end{table*}

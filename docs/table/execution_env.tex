@@ -1,0 +1,17 @@
+% Execution environment and lint rule configuration for each language.
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Language} & \textbf{Linter} & \textbf{Rule Family} & \textbf{Linter Version} & \textbf{Compiler/Runtime} & \textbf{Timeout} & \textbf{Memory} \\
+\midrule
+C++ & clang-tidy & bugprone, performance, modernize, readability & 22.1.0 & g++ 13.3.0 & 10s & 1GB \\
+Python & Pylint & error, performance, refactor, convention & 4.0.5 & Python 3.12.10 & 10s & 1GB \\
+Java & PMD & Error Prone, Performance, Design, Code Style & 7.12.0 & OpenJDK 21.0.10 & 10s & 1GB \\
+\bottomrule
+\end{tabular}
+
+\caption{Execution environment and lint rule configuration for each language.}
+\label{app:execution_env}
+\end{table*}

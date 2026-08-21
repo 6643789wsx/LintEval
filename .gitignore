@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Eval artifacts
+eval_results/*.api_cache.json
+outputs/
+logs/
+
+# OS / editor
+.DS_Store
+.vscode/
+*.swp
+
+# The full dataset is shipped as three shards (linteval_full.jsonl.part{1,2,3})
+# to stay under GitHub's 100 MB per-file limit. The merged single file below is
+# a local build artifact produced by: python scripts/split_dataset.py --merge
+# (it is re-created locally and never committed).
+data/linteval_full.jsonl

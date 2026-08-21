@@ -1,0 +1,31 @@
+% ============================================================
+% Placement: Main Text (Section 4.2 - Language Analysis)
+% ============================================================
+% T3: Language-wise Performance (Main Text - Selected Metrics)
+% Pass@1 and Reduction@P by programming language
+\begin{table*}[t]
+\centering
+\small
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{2}{c}{\textbf{C++}} & \multicolumn{2}{c}{\textbf{Python}} & \multicolumn{2}{c}{\textbf{Java}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+\textbf{Model} & Pass@1 & Reduction@P & Pass@1 & Reduction@P & Pass@1 & Reduction@P \\
+\midrule
+GPT-5.2 & 67.2\% & 94.9\% & 64.5\% & 84.4\% & \textbf{76.5\%} & 77.5\% \\
+GPT-5.4-mini & \textbf{69.7\%} & \textbf{95.6\%} & \textbf{65.5\%} & \textbf{86.5\%} & 72.5\% & \textbf{81.7\%} \\
+\midrule
+DeepSeek-v3.2 & 68.0\% & 76.6\% & 46.8\% & 70.6\% & 51.0\% & 63.7\% \\
+Qwen2.5-Coder-32B & 64.3\% & 58.6\% & 58.1\% & 63.5\% & 62.7\% & 37.2\% \\
+Qwen2.5-Coder-0.5B & 63.9\% & 1.5\% & 32.5\% & -7.2\% & 41.2\% & -3.6\% \\
+Qwen2.5-Coder-3B & 66.8\% & 9.5\% & 35.0\% & 10.1\% & 49.0\% & 8.5\% \\
+Qwen2.5-Coder-7B & 67.6\% & 27.6\% & 35.5\% & 19.0\% & 52.9\% & 21.6\% \\
+Llama-3.2-1B & 44.7\% & 5.2\% & 23.2\% & -23.6\% & 23.5\% & 18.5\% \\
+Llama-3.2-3B & 50.8\% & 18.8\% & 23.6\% & 13.2\% & 41.2\% & 31.4\% \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Pass@1 and Reduction@P by programming language on LintEval-Lite. Best results per column are in \textbf{bold}.}
+\label{tab:language_performance}
+\end{table*}

@@ -1,0 +1,12 @@
+# Python packages
+openai>=1.0.0
+openpyxl>=3.1.0
+pyyaml>=6.0
+tqdm>=4.60.0
+numpy>=1.23.0
+matplotlib>=3.7.0
+pylint>=3.0.0
+transformers>=4.40.0
+
+# Required only for local model evaluation with vLLM (optional)
+# vllm>=0.5.0

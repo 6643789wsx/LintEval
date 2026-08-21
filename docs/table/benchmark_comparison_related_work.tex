@@ -1,0 +1,27 @@
+% Comparison of LintEval with closely related prior work on linter/static-analysis-guided code revision.
+\begin{table*}[t]
+\centering
+\small
+\caption{Comparison with prior work on LLM-based linter/static-analysis resolution. LintEval differs in three key aspects: (1) multilingual coverage with unified cross-linter taxonomy, (2) four-metric evaluation exposing the reduction--preservation--cost trade-off, and (3) explicit conditioning of quality metrics on functional preservation (Pass@1). Venkatesh et al.\ \citep{venkatesh2024emergence} study LLM responses to compiler errors but focus on error explanation rather than code revision.}
+\label{tab:prior_work_comparison}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccccc}
+\toprule
+ & \textbf{CORE} & \textbf{Blyth et al.} & \textbf{Venkatesh et al.} & \textbf{MetaLint} & \textbf{LintLLM} & \textbf{LintEval} \\
+ & \citep{wadhwa2024core} & \citep{blyth2025static} & \citep{venkatesh2024emergence} & \citep{naik2025metalint} & \citep{fang2025lintllm} & \textbf{(Ours)} \\
+\midrule
+Task definition & Resolution & Resolution & Explanation & Detection & Instruction & Revision \\
+ & (alert resolution) & (alert resolution) & (explain errors) & (find lint alerts) & (follow rules) & (alert resolution + functionality preservation) \\
+Data source & GitHub & GitHub & Student code & Synthetic & Synthetic & CodeContests+ \\
+Languages & Python & Java & Multi & Multi & Multi & C++, Python, Java \\
+Test-passing input & \checkmark & \checkmark & -- & -- & -- & \checkmark \\
+Evaluates functionality preservation & Single metric & -- & -- & -- & -- & Pass@1 gating \\
+Evaluates avoiding new alerts & -- & -- & -- & -- & -- & New@P \\
+Evaluates edit minimality & -- & -- & -- & -- & -- & LinePerFix@P \\
+Alert resolution & Fix rate & Fix rate & -- & -- & Accuracy & Reduction@P \\
+Unified cross-linter taxonomy & -- & -- & -- & -- & -- & 5-category \\
+Benchmark size & 1 task & Small & N/A & N/A & N/A & 13{,}722 / 498 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table*}

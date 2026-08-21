@@ -1,0 +1,29 @@
+% ============================================================
+% Table: Failure Case Analysis
+% ============================================================
+\begin{table*}[t]
+\centering
+\small
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l cccc cccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Pass Cases}} & \multicolumn{4}{c}{\textbf{Failure Cases}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9}
+\textbf{Model} & \textbf{Reduction@P} & \textbf{New@P} & \textbf{$\Delta$Line@P} & \textbf{LinePerFix@P} & \textbf{Reduction@F} & \textbf{New@F} & \textbf{$\Delta$Line@F} & \textbf{LinePerFix@F} \\
+\midrule
+GPT-5.2 & 87.8\% & 7.3\% & 71.7 & 6.8 & 86.8\% \textcolor{red!70!black}{$\downarrow$} & 6.3\% \textcolor{green!70!black}{$\downarrow$} & 65.5 \textcolor{green!70!black}{$\downarrow$} & 7.4 \textcolor{red!70!black}{$\uparrow$} \\
+GPT-5.4-mini & \textbf{90.4\%} & \textbf{5.6\%} & 60.2 & \textbf{5.2} & \textbf{89.2\%} \textcolor{red!70!black}{$\downarrow$} & \textbf{4.6\%} \textcolor{green!70!black}{$\downarrow$} & 69.0 \textcolor{red!70!black}{$\uparrow$} & \textbf{6.0} \textcolor{red!70!black}{$\uparrow$} \\
+\midrule
+DeepSeek-v3.2 & 73.0\% & 6.7\% & 45.4 & 5.5 & 41.6\% \textcolor{red!70!black}{$\downarrow$} & 6.5\% \textcolor{green!70!black}{$\downarrow$} & 23.6 \textcolor{green!70!black}{$\downarrow$} & 7.4 \textcolor{red!70!black}{$\uparrow$} \\
+Qwen2.5-Coder-32B & 57.1\% & 8.1\% & 33.3 & 5.7 & 45.3\% \textcolor{red!70!black}{$\downarrow$} & 13.7\% \textcolor{red!70!black}{$\uparrow$} & 30.4 \textcolor{green!70!black}{$\downarrow$} & 6.7 \textcolor{red!70!black}{$\uparrow$} \\
+Qwen2.5-Coder-0.5B & -1.2\% & 10.5\% & \textbf{17.2} & 21.5 & -169.1\% \textcolor{red!70!black}{$\downarrow$} & 11.7\% \textcolor{red!70!black}{$\uparrow$} & 13.4 \textcolor{green!70!black}{$\downarrow$} & 489.0 \textcolor{red!70!black}{$\uparrow$} \\
+Qwen2.5-Coder-3B & 9.5\% & 11.2\% & 27.9 & 15.0 & -155.3\% \textcolor{red!70!black}{$\downarrow$} & 9.2\% \textcolor{green!70!black}{$\downarrow$} & 17.7 \textcolor{green!70!black}{$\downarrow$} & 78.2 \textcolor{red!70!black}{$\uparrow$} \\
+Qwen2.5-Coder-7B & 24.7\% & 12.7\% & 32.5 & 8.9 & -88.2\% \textcolor{red!70!black}{$\downarrow$} & 13.6\% \textcolor{red!70!black}{$\uparrow$} & 18.8 \textcolor{green!70!black}{$\downarrow$} & 23.4 \textcolor{red!70!black}{$\uparrow$} \\
+Llama-3.2-1B & 0.5\% & 13.8\% & 23.5 & 19.6 & -219.6\% \textcolor{red!70!black}{$\downarrow$} & 14.3\% \textcolor{red!70!black}{$\uparrow$} & \textbf{8.4} \textcolor{green!70!black}{$\downarrow$} & 154.7 \textcolor{red!70!black}{$\uparrow$} \\
+Llama-3.2-3B & 19.8\% & 13.5\% & 29.8 & 11.0 & -180.2\% \textcolor{red!70!black}{$\downarrow$} & 23.2\% \textcolor{red!70!black}{$\uparrow$} & 10.5 \textcolor{green!70!black}{$\downarrow$} & 30.8 \textcolor{red!70!black}{$\uparrow$} \\
+\bottomrule
+\end{tabular}
+}
+\caption{Editing behavior of passed and failed refactoring attempts. \texttt{@P} metrics are computed over $S_{\text{pass}}$; \texttt{@F} metrics are computed over failed instances for diagnostic analysis only. Arrows indicate whether the failure-case value is higher or lower than the pass-case value. \textbf{Bold} marks the best value per column.}
+\label{tab:failure_analysis}
+\end{table*}
