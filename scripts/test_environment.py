@@ -74,7 +74,7 @@ def main() -> int:
 
     # Repository layout
     print("Repository Layout:")
-    for rel in ["src", "scripts", "scripts/gen_tab", "configs", "tools", "eval_results", "docs/table"]:
+    for rel in ["src", "scripts", "configs", "tools", "lite", "full", "eval_results"]:
         p = PROJECT_ROOT / rel
         ok = p.exists() and p.is_dir()
         print(f"  {'OK   ' if ok else 'MISS '}{rel}/")
@@ -83,7 +83,9 @@ def main() -> int:
 
     # Data files
     print("Data Files:")
-    for rel in ["data/demo_100.jsonl", "data/linteval_lite_test.jsonl", "tools/testlib.h"]:
+    for rel in ["lite/linteval_lite.jsonl", "lite/linteval_lite.parquet",
+                "lite/preview.json", "full/linteval_full.parquet",
+                "full/preview.json", "tools/testlib.h"]:
         p = PROJECT_ROOT / rel
         ok = p.exists()
         print(f"  {'OK   ' if ok else 'MISS '}{rel}")

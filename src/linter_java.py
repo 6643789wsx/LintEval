@@ -2,6 +2,7 @@
 linter_java.py -- Java linter (PMD) wrapper.
 """
 
+import sys
 import subprocess
 import json
 import os
@@ -10,6 +11,25 @@ import tempfile
 import shutil
 from typing import List, Dict, Optional
 from pathlib import Path
+
+_MISSING_BINARY_WARNED = False
+
+
+def _warn_missing_binary() -> None:
+    """Warn once (not per sample) when the linter binary cannot be executed.
+
+    Without this, a missing PMD silently yields zero alerts for every sample,
+    which would silently corrupt the reported metrics.
+    """
+    global _MISSING_BINARY_WARNED
+    if not _MISSING_BINARY_WARNED:
+        _MISSING_BINARY_WARNED = True
+        print(
+            "WARNING: PMD could not be executed (set PMD_BIN or put it on PATH). "
+            "Linter messages will be EMPTY for this language.",
+            file=sys.stderr,
+        )
+
 
 PMD_BIN = os.environ.get("PMD_BIN") or shutil.which("pmd") or "pmd"
 
@@ -258,6 +278,7 @@ def run_pmd(code: str, rulesets: Optional[List[str]] = None, timeout: int = 30) 
     except subprocess.TimeoutExpired:
         return []
     except FileNotFoundError:
+        _warn_missing_binary()
         return []
     finally:
         try:

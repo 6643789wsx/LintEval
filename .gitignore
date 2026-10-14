@@ -19,4 +19,8 @@ logs/
 # to stay under GitHub's 100 MB per-file limit. The merged single file below is
 # a local build artifact produced by: python scripts/split_dataset.py --merge
 # (it is re-created locally and never committed).
-data/linteval_full.jsonl
+full/linteval_full.jsonl
+
+# Smoke-test artifacts (local only)
+eval_results/_smoke_input.jsonl
+eval_results/smoke_*.json

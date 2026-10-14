@@ -1,12 +1,17 @@
-# Python packages
-openai>=1.0.0
-openpyxl>=3.1.0
+# Core evaluation dependencies
+openai>=1.0.0          # OpenAI-compatible APIs (PKU MaaS, DeepSeek, vLLM server, ...)
+requests>=2.28.0       # HTTP client used by the API evaluator
+datasets>=2.18.0       # Parquet/JSONL loading
+pyarrow>=12.0.0        # Parquet support
 pyyaml>=6.0
-tqdm>=4.60.0
 numpy>=1.23.0
+tqdm>=4.60.0
+openpyxl>=3.1.0
 matplotlib>=3.7.0
+
+# Linters (pip-installable ones; clang-tidy and PMD are system tools, see README)
 pylint>=3.0.0
 transformers>=4.40.0
 
-# Required only for local model evaluation with vLLM (optional)
+# Optional: local model evaluation through vLLM
 # vllm>=0.5.0

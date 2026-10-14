@@ -1,5 +1,6 @@
 """C++ linter (clang-tidy) wrapper for code revision benchmark."""
 
+import sys
 import subprocess
 import json
 import re
@@ -8,6 +9,25 @@ import shutil
 import tempfile
 from pathlib import Path
 from typing import List, Dict, Optional
+
+_MISSING_BINARY_WARNED = False
+
+
+def _warn_missing_binary() -> None:
+    """Warn once (not per sample) when the linter binary cannot be executed.
+
+    Without this, a missing clang-tidy silently yields zero alerts for every sample,
+    which would silently corrupt the reported metrics.
+    """
+    global _MISSING_BINARY_WARNED
+    if not _MISSING_BINARY_WARNED:
+        _MISSING_BINARY_WARNED = True
+        print(
+            "WARNING: clang-tidy could not be executed (set CLANG_TIDY_BIN or put it on PATH). "
+            "Linter messages will be EMPTY for this language.",
+            file=sys.stderr,
+        )
+
 
 # Default clang-tidy checks - avoid naming rules
 DEFAULT_CHECKS = [
@@ -186,6 +206,7 @@ def run_clang_tidy(
     except subprocess.TimeoutExpired:
         return []
     except FileNotFoundError:
+        _warn_missing_binary()
         return []
     finally:
         try:

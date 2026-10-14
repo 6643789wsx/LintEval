@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Split / merge the full LintEval dataset.
 
-GitHub enforces a 100 MB per-file limit, while ``data/linteval_full.jsonl`` is
+GitHub enforces a 100 MB per-file limit, while ``full/linteval_full.jsonl`` is
 ~233 MB. To ship the full dataset in the repository we store it as three
 line-aligned, size-balanced shards:
 
-    data/linteval_full.jsonl.part1
-    data/linteval_full.jsonl.part2
-    data/linteval_full.jsonl.part3
+    full/linteval_full.jsonl.part1
+    full/linteval_full.jsonl.part2
+    full/linteval_full.jsonl.part3
 
 Usage:
     # Split the (existing) full file into shards:
@@ -15,7 +15,7 @@ Usage:
 
     # Merge shards back into a single JSONL for evaluation:
     python scripts/split_dataset.py --merge
-    # or: cat data/linteval_full.jsonl.part{1,2,3} > data/linteval_full.jsonl
+    # or: cat full/linteval_full.jsonl.part{1,2,3} > full/linteval_full.jsonl
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_DATA = PROJECT_ROOT / "data" / "linteval_full.jsonl"
+DEFAULT_DATA = PROJECT_ROOT / "full" / "linteval_full.jsonl"
 DEFAULT_N_SHARDS = 3
 
 

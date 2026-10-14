@@ -37,7 +37,7 @@ def main() -> int:
     print()
 
     # ---- 1. Load demo data (eval format) ----
-    demo_file = PROJECT_ROOT / "data" / "demo_100.jsonl"
+    demo_file = PROJECT_ROOT / "lite" / "demo_100.jsonl"
     if not demo_file.exists():
         print(f"Error: demo data not found: {demo_file}")
         return 1

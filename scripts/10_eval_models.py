@@ -75,7 +75,7 @@ from src.metrics import (  # noqa: E402
 BENCHMARK_DIR = _PROJECT_ROOT
 # Default evaluation dataset: LintEval-Lite (498 samples).
 # Override with --data_path to evaluate another split (e.g. the full 13,061-sample set).
-DATA_PATH = BENCHMARK_DIR / "data" / "linteval_lite_test.jsonl"
+DATA_PATH = BENCHMARK_DIR / "lite" / "linteval_lite.jsonl"
 RESULT_DIR = BENCHMARK_DIR / "eval_results"
 OUTPUTS_DIR = BENCHMARK_DIR / "outputs"
 TESTLIB_INCLUDE = str(BENCHMARK_DIR / "tools")
@@ -106,21 +106,40 @@ CUSTOM_API_CONFIG = {
 # ============================================================
 
 def load_test_data(path: Path, limit: int = 0) -> List[Dict]:
-    """Load test data from JSONL.
+    """Load the evaluation split from JSONL or Parquet.
 
-    For v3_test_eval.jsonl (pre-filtered v3 test set), load all records.
-    For validated_revisions.jsonl, filter to split=='test'.
+    Both formats ship in ``lite/`` and ``full/``; Parquet is loaded through
+    ``datasets`` (no extra dependency beyond ``pyarrow``).
     """
-    is_v3_eval = "v3_test_eval" in path.name
+    # The released splits (lite/ and full/) are already final evaluation sets:
+    # every record in the file you pass is evaluated.  The per-record ``split``
+    # field records the *problem-level* construction split (train/valid/test) for
+    # provenance and must NOT be used to filter evaluation data -- doing so would
+    # silently shrink LintEval-Lite from 498 to 68 samples.
+    # The legacy filter is kept only for raw, not-yet-split sources.
+    is_raw_source = "validated_revisions" in path.name or "raw" in path.name
     records: List[Dict] = []
-    with open(path, "r", encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if not line:
-                continue
-            rec = json.loads(line)
-            if is_v3_eval or rec.get("split") == "test" or "split" not in rec:
-                records.append(rec)
+
+    if path.suffix == ".parquet":
+        from datasets import load_dataset
+
+        dataset = load_dataset("parquet", data_files=str(path), split="train")
+        records = [dict(row) for row in dataset]
+    else:
+        with open(path, "r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                records.append(json.loads(line))
+
+    if is_raw_source:
+        kept = [rec for rec in records if rec.get("split") == "test" or "split" not in rec]
+        if len(kept) != len(records):
+            print(f"INFO: raw source {path.name}: kept {len(kept)}/{len(records)} "
+                  f"records with split=='test'")
+        records = kept
+
     if limit > 0:
         records = records[:limit]
     return records
@@ -589,11 +608,15 @@ def evaluate_model_api(
             "Content-Type": "application/json"
         }
 
+        # Newer OpenAI endpoints use `max_completion_tokens`, most OpenAI-compatible
+        # servers (vLLM, PKU MaaS, DeepSeek, ...) still use `max_tokens`.  We start
+        # with `max_tokens` and switch on demand when a server rejects it.
+        token_param = "max_tokens"
         payload = {
             "model": config["model_id"],
             "messages": chat,
             "temperature": 0.0,
-            "max_completion_tokens": 4096
+            token_param: 4096
         }
 
         ck = _cache_key(i)
@@ -622,6 +645,25 @@ def evaluate_model_api(
                     return i, "", 0
                     
             except requests.exceptions.HTTPError as e:
+                body = ""
+                try:
+                    body = e.response.text or ""
+                except Exception:
+                    body = ""
+                if e.response.status_code == 400 and (
+                    "max_completion_tokens" in body or "max_tokens" in body
+                ):
+                    other = "max_completion_tokens" if token_param == "max_tokens" else "max_tokens"
+                    if other != token_param:
+                        print(f"  Server rejected `{token_param}`; retrying with `{other}`")
+                        token_param = other
+                        payload = {
+                            "model": config["model_id"],
+                            "messages": chat,
+                            "temperature": 0.0,
+                            token_param: 4096,
+                        }
+                        continue
                 if e.response.status_code == 429:
                     wait_time = 10 * (attempt + 1)
                     print(f"  API rate limit sample {i} attempt {attempt+1}, waiting {wait_time}s...")
@@ -850,9 +892,10 @@ def main():
     parser.add_argument("--api_key", type=str, default="", help="API key for custom API")
     parser.add_argument("--base_url", type=str, default="", help="Base URL for custom API")
     parser.add_argument("--api_model_id", type=str, default="", help="Model ID for custom API")
+    parser.add_argument("--model", type=str, default="", help="Alias of --api_model_id (convenience)")
     parser.add_argument("--api_display_name", type=str, default="", help="Display name for custom API model")
     parser.add_argument("--n_workers", type=int, default=4, help="Number of parallel API workers")
-    parser.add_argument("--api_timeout", type=int, default=60, help="Per-request timeout (seconds) for API calls")
+    parser.add_argument("--api_timeout", type=int, default=300, help="Per-request timeout (seconds) for API calls")
     parser.add_argument("--api_max_retries", type=int, default=5, help="Max retries per sample for API calls")
     parser.add_argument("--baseline_only", action="store_true", help="Only compute baseline")
     parser.add_argument("--skip_baseline", action="store_true", help="Skip baseline if already saved")
@@ -947,13 +990,28 @@ def main():
             models_to_eval[DEEPSEEK_CONFIG["display_name"]] = "api:deepseek"
 
     if args.custom_api:
-        api_key = args.api_key or os.environ.get("CUSTOM_API_KEY", "")
-        base_url = args.base_url or os.environ.get("CUSTOM_BASE_URL", "")
-        model_id = args.api_model_id or os.environ.get("CUSTOM_MODEL_ID", "")
-        display_name = args.api_display_name or os.environ.get("CUSTOM_DISPLAY_NAME", "") or model_id
+        def _env(*names: str) -> str:
+            """First non-empty environment variable among ``names``."""
+            for name in names:
+                value = os.environ.get(name, "")
+                if value:
+                    return value
+            return ""
 
-        if not api_key or not base_url or not model_id:
-            print("WARNING: Custom API requires --api_key/ENV(CUSTOM_API_KEY), --base_url/ENV(CUSTOM_BASE_URL), and --api_model_id/ENV(CUSTOM_MODEL_ID)")
+        api_key = args.api_key or _env("CUSTOM_API_KEY", "PKU_MAAS_API_KEY", "pku_maas_api_key")
+        base_url = args.base_url or _env("CUSTOM_BASE_URL", "PKU_MAAS_BASE_URL", "pku_maas_base_url")
+        model_id = (
+            args.api_model_id
+            or getattr(args, "model", "")
+            or _env("CUSTOM_MODEL_ID", "PKU_MAAS_MODEL_NAME", "pku_maas_model_name")
+            or "gpt-6-luna"
+        )
+        display_name = args.api_display_name or _env("CUSTOM_DISPLAY_NAME") or model_id
+
+        if not api_key or not base_url:
+            print("WARNING: Custom API requires an API key and base URL.")
+            print("         Pass --api_key/--base_url, or export CUSTOM_API_KEY/CUSTOM_BASE_URL,")
+            print("         or export PKU_MAAS_API_KEY/PKU_MAAS_BASE_URL (see README).")
         else:
             CUSTOM_API_CONFIG["api_key"] = api_key
             CUSTOM_API_CONFIG["base_url"] = base_url

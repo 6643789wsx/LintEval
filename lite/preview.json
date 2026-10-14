@@ -1,0 +1,670 @@
+[
+  {
+    "sample_id": "1520_B_cpp_0",
+    "problem_id": "1520_B",
+    "split": "test",
+    "language": "cpp",
+    "code": "#include<cmath>\n#include<cstdio>\n#include<cstring>\n#include<iostream>\n#include<algorithm>\nusing namespace std;\n#define loopa(x,y,z) for(register int x=y;x<=z;++x)\n#define loopb(x,y,z) for(register int x=y;x>=z;--x)\n#define pr(x) printf(\"%d\\n\",x)\n#define ll long long\ninline void re(int &x)\n{\n\tint s=0,w=1;char c=getchar();\n\twhile(c<'0'||c>'9'){if(c=='-')w=-1;c=getchar();}\n\twhile(c>='0'&&c<='9'){s=s*10+c-'0';c=getchar();}\n    x=s*w;\n\treturn;\n}\nint t;\nint a[114514];\nint s[20];\nint get_num(int d,int i)\n{\n    int ret=0;\n    while(i)\n    {\n        ret*=10;\n        ret+=d;\n        --i;\n    }\n    return ret;\n}\nint sol(int n)\n{\n    int ans=0;\n    int temp=1;\n    bool che=1;\n    while(che)\n    {\n //       printf(\"?\\n\");\n        for(int i=1;i<=9;i++)\n        {\n //           printf(\"%d\\n\",get_num(i,temp));\n            if(get_num(i,temp)<=n)\n            ++ans;\n            else\n            {\n                che=0;\n                break;\n            }\n        }\n        ++temp;\n    }\n    return ans;\n}\nint main()\n{\n    re(t);\n    loopa(i,1,t)\n    {\n        int n;\n        re(n);\n        printf(\"%d\\n\",sol(n));\n    }\n}",
+    "linter_messages": [
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 7,
+        "column": 39,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 7,
+        "column": 43,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 7,
+        "column": 46,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 7,
+        "column": 50,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 8,
+        "column": 39,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 8,
+        "column": 43,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 8,
+        "column": 46,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 8,
+        "column": 50,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 13,
+        "column": 21,
+        "severity": "warning",
+        "message_text": "narrowing conversion from 'int' to signed type 'char' is implementation-defined",
+        "check_name": "bugprone-narrowing-conversions",
+        "category": "bugprone",
+        "message_identity": "bugprone-narrowing-conversions::narrowing conversion from 'X' to signed type 'X' is implementation-defined"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 14,
+        "column": 32,
+        "severity": "warning",
+        "message_text": "statement should be inside braces",
+        "check_name": "readability-braces-around-statements",
+        "category": "readability",
+        "message_identity": "readability-braces-around-statements::statement should be inside braces"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 14,
+        "column": 39,
+        "severity": "warning",
+        "message_text": "narrowing conversion from 'int' to signed type 'char' is implementation-defined",
+        "check_name": "bugprone-narrowing-conversions",
+        "category": "bugprone",
+        "message_identity": "bugprone-narrowing-conversions::narrowing conversion from 'X' to signed type 'X' is implementation-defined"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 15,
+        "column": 39,
+        "severity": "warning",
+        "message_text": "narrowing conversion from 'int' to signed type 'char' is implementation-defined",
+        "check_name": "bugprone-narrowing-conversions",
+        "category": "bugprone",
+        "message_identity": "bugprone-narrowing-conversions::narrowing conversion from 'X' to signed type 'X' is implementation-defined"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 17,
+        "column": 2,
+        "severity": "warning",
+        "message_text": "redundant return statement at the end of a function with a void return type",
+        "check_name": "readability-redundant-control-flow",
+        "category": "readability",
+        "message_identity": "readability-redundant-control-flow::redundant return statement at the end of a function with a void return type"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 22,
+        "column": 13,
+        "severity": "warning",
+        "message_text": "2 adjacent parameters of 'get_num' of similar type ('int') are easily swapped by mistake",
+        "check_name": "bugprone-easily-swappable-parameters",
+        "category": "bugprone",
+        "message_identity": "bugprone-easily-swappable-parameters::2 adjacent parameters of 'X' of similar type ('X') are easily swapped by mistake"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 44,
+        "column": 35,
+        "severity": "warning",
+        "message_text": "statement should be inside braces",
+        "check_name": "readability-braces-around-statements",
+        "category": "readability",
+        "message_identity": "readability-braces-around-statements::statement should be inside braces"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 59,
+        "column": 5,
+        "severity": "error",
+        "message_text": "ISO C++17 does not allow 'register' storage class specifier",
+        "check_name": "clang-diagnostic-register",
+        "category": "other",
+        "message_identity": "clang-diagnostic-register::ISO C++17 does not allow 'X' storage class specifier"
+      }
+    ],
+    "linter_message_count": 16,
+    "original_loc": 65,
+    "compile_ok": true,
+    "source": "Codeforces",
+    "title": "Ordinary Numbers",
+    "generator": "#include \"testlib.h\"\n#include <bits/stdc++.h>\nusing namespace std;\nint main(int argc, char* argv[]) {\n    registerGen(argc, argv, 1);\n\n    int t = opt<int>(\"t\", -1);\n    string type = opt<string>(\"type\", \"random\");\n\n    if(type == \"max_t\") {\n        t = 10000;\n        printf(\"%d\\n\", t);\n        for(int i = 0; i < t; ++i) {\n            printf(\"%d\\n\", rnd.next(1, int(1e9)));\n        }\n    } else if(type == \"min_t\") {\n        t = 1;\n        printf(\"%d\\n\", t);\n        int n = rnd.next(1, int(1e9));\n        printf(\"%d\\n\", n);\n    } else if(type == \"ordinary\") {\n        if(t == -1) t = rnd.next(1, 10000);\n        printf(\"%d\\n\", t);\n        vector<int> ordinaries;\n        for(int d = 1; d <= 9; ++d) {\n            for(int digit = 1; digit <= 9; ++digit) {\n                int num = 0;\n                for(int i = 0; i < d; ++i)\n                    num = num *10 + digit;\n                if(num <= 1e9)\n                    ordinaries.push_back(num);\n            }\n        }\n        int size = ordinaries.size();\n        for(int i = 0; i < t; ++i) {\n            int idx = rnd.next(0,size-1);\n            int n = ordinaries[idx];\n            printf(\"%d\\n\", n);\n        }\n    } else if(type == \"edge\") {\n        if(t == -1) t = rnd.next(1, 10000);\n        printf(\"%d\\n\", t);\n        vector<int> ordinaries;\n        for(int d = 1; d <= 9; ++d) {\n            for(int digit = 1; digit <= 9; ++digit) {\n                int num = 0;\n                for(int i = 0; i < d; ++i)\n                    num = num *10 + digit;\n                if(num <= 1e9)\n                    ordinaries.push_back(num);\n            }\n        }\n        sort(ordinaries.begin(), ordinaries.end());\n        int size = ordinaries.size();\n        for(int i = 0; i < t; ++i) {\n            int idx = rnd.next(0,size-1);\n            int delta = rnd.next(-2,2);\n            int n = ordinaries[idx] + delta;\n            if(n < 1) n = 1;\n            if(n > int(1e9)) n = int(1e9);\n            printf(\"%d\\n\", n);\n        }\n    } else if(type == \"max_n\") {\n        if(t == -1) t = rnd.next(1, 10000);\n        printf(\"%d\\n\", t);\n        for(int i = 0; i < t; ++i) {\n            printf(\"%d\\n\", int(1e9));\n        }\n    } else if(type == \"min_n\") {\n        if(t == -1) t = rnd.next(1, 10000);\n        printf(\"%d\\n\", t);\n        for(int i = 0; i < t; ++i) {\n            printf(\"%d\\n\", 1);\n        }\n    } else if(type == \"random\") {\n        if(t == -1) t = rnd.next(1, 10000);\n        printf(\"%d\\n\", t);\n        for(int i = 0; i < t; ++i) {\n            printf(\"%d\\n\", rnd.next(1, int(1e9)));\n        }\n    } else {\n        fprintf(stderr, \"Unknown type %s\\n\", type.c_str());\n        return 1;\n    }\n    return 0;\n}\n",
+    "generator_cmd": "./gen -t 1 -type min_t\n./gen -t 10000 -type max_t\n./gen -t 5000 -type random\n./gen -t 10000 -type random\n./gen -t 1 -type random\n./gen -t 9999 -type max_n\n./gen -t 9999 -type min_n\n./gen -t 1234 -type ordinary\n./gen -t 4321 -type ordinary\n./gen -type ordinary\n./gen -type edge\n./gen -t 10000 -type edge\n./gen -t 50 -type edge\n./gen -t 10000 -type max_n\n./gen -t 10000 -type min_n\n./gen -t 10000 -type min_t\n./gen -type random\n./gen -type edge\n./gen -type ordinary\n./gen -t 10000 -type random\n./gen -t 10000 -type edge\n./gen -t 10000 -type ordinary\n./gen -t 2000 -type random\n./gen -t 500 -type min_n\n./gen -t 500 -type max_n\n./gen -t 10000 -type min_n\n./gen -t 10000 -type max_n\n./gen -t 1 -type min_n\n./gen -t 1 -type max_n\n./gen -t 1 -type ordinary\n",
+    "checker": "#include \"testlib.h\"\r\n\r\nusing namespace std;\r\n\r\nint main(int argc, char *argv[]) {\r\n    setName(\"compare ordered sequences of signed int%d numbers\", 8 * int(sizeof(long long)));\r\n\r\n    registerTestlibCmd(argc, argv);\r\n\r\n    int n = 0;\r\n    string firstElems;\r\n\r\n    while (!ans.seekEof() && !ouf.seekEof()) {\r\n        n++;\r\n        long long j = ans.readLong();\r\n        long long p = ouf.readLong();\r\n        if (j != p)\r\n            quitf(_wa, \"%d%s numbers differ - expected: '%s', found: '%s'\", n, englishEnding(n).c_str(),\r\n                  vtos(j).c_str(), vtos(p).c_str());\r\n        else if (n <= 5) {\r\n            if (firstElems.length() > 0)\r\n                firstElems += \" \";\r\n            firstElems += vtos(j);\r\n        }\r\n    }\r\n\r\n    int extraInAnsCount = 0;\r\n\r\n    while (!ans.seekEof()) {\r\n        ans.readLong();\r\n        extraInAnsCount++;\r\n    }\r\n\r\n    int extraInOufCount = 0;\r\n\r\n    while (!ouf.seekEof()) {\r\n        ouf.readLong();\r\n        extraInOufCount++;\r\n    }\r\n\r\n    if (extraInAnsCount > 0)\r\n        quitf(_wa, \"Answer contains longer sequence [length = %d], but output contains %d elements\",\r\n              n + extraInAnsCount, n);\r\n\r\n    if (extraInOufCount > 0)\r\n        quitf(_wa, \"Output contains longer sequence [length = %d], but answer contains %d elements\",\r\n              n + extraInOufCount, n);\r\n\r\n    if (n <= 5)\r\n        quitf(_ok, \"%d number(s): \\\"%s\\\"\", n, compress(firstElems).c_str());\r\n    else\r\n        quitf(_ok, \"%d numbers\", n);\r\n}",
+    "validator": "#include \"testlib.h\"\n#include <bits/stdc++.h>\nusing namespace std;\nint main(int argc, char* argv[]) {\n    registerValidation(argc, argv);\n    int t = inf.readInt(1, 10000, \"t\");\n    inf.readEoln();\n    for (int i = 0; i < t; ++i) {\n        int n = inf.readInt(1, 1000000000, \"n\");\n        inf.readEoln();\n    }\n    inf.readEof();\n    return 0;\n}\n",
+    "revised_code": "#include<cmath>\n#include<cstdio>\n#include<cstring>\n#include<iostream>\n#include<algorithm>\nusing namespace std;\n#define loopa(x,y,z) for(int (x)=(y);(x)<=(z);++(x))\n#define loopb(x,y,z) for(int (x)=(y);(x)>=(z);--(x))\n#define pr(x) printf(\"%d\\n\",(x))\n#define ll long long\ninline void re(int &x)\n{\n\tint s=0,w=1;int c=getchar();\n\twhile(c<'0'||c>'9'){if(c=='-')w=-1;c=getchar();}\n\twhile(c>='0'&&c<='9'){s=s*10+c-'0';c=getchar();}\n\tx=s*w;\n}\nint t;\nint a[114514];\nint s[20];\nint get_num(int digit,int count)\n{\n    int ret=0;\n    while(count)\n    {\n        ret*=10;\n        ret+=digit;\n        --count;\n    }\n    return ret;\n}\nint sol(int n)\n{\n    int ans=0;\n    int temp=1;\n    bool che=1;\n    while(che)\n    {\n        for(int i=1;i<=9;i++)\n        {\n            if(get_num(i,temp)<=n)\n            {\n                ++ans;\n            }\n            else\n            {\n                che=0;\n                break;\n            }\n        }\n        ++temp;\n    }\n    return ans;\n}\nint main()\n{\n    re(t);\n    loopa(i,1,t)\n    {\n        int n;\n        re(n);\n        printf(\"%d\\n\",sol(n));\n    }\n}",
+    "raw_response": "```cpp\n#include<cmath>\n#include<cstdio>\n#include<cstring>\n#include<iostream>\n#include<algorithm>\nusing namespace std;\n#define loopa(x,y,z) for(int (x)=(y);(x)<=(z);++(x))\n#define loopb(x,y,z) for(int (x)=(y);(x)>=(z);--(x))\n#define pr(x) printf(\"%d\\n\",(x))\n#define ll long long\ninline void re(int &x)\n{\n\tint s=0,w=1;int c=getchar();\n\twhile(c<'0'||c>'9'){if(c=='-')w=-1;c=getchar();}\n\twhile(c>='0'&&c<='9'){s=s*10+c-'0';c=getchar();}\n\tx=s*w;\n}\nint t;\nint a[114514];\nint s[20];\nint get_num(int digit,int count)\n{\n    int ret=0;\n    while(count)\n    {\n        ret*=10;\n        ret+=digit;\n        --count;\n    }\n    return ret;\n}\nint sol(int n)\n{\n    int ans=0;\n    int temp=1;\n    bool che=1;\n    while(che)\n    {\n        for(int i=1;i<=9;i++)\n        {\n            if(get_num(i,temp)<=n)\n            {\n                ++ans;\n            }\n            else\n            {\n                che=0;\n                break;\n            }\n        }\n        ++temp;\n    }\n    return ans;\n}\nint main()\n{\n    re(t);\n    loopa(i,1,t)\n    {\n        int n;\n        re(n);\n        printf(\"%d\\n\",sol(n));\n    }\n}\n```",
+    "tokens_used": 1469,
+    "error": null,
+    "extraction_ok": true,
+    "revision_error": null,
+    "pass_at_1": true,
+    "validation_error": null,
+    "original_messages": [
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 7,
+        "column": 39,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 7,
+        "column": 43,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 7,
+        "column": 46,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 7,
+        "column": 50,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 8,
+        "column": 39,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 8,
+        "column": 43,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 8,
+        "column": 46,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 8,
+        "column": 50,
+        "severity": "warning",
+        "message_text": "macro argument should be enclosed in parentheses",
+        "check_name": "bugprone-macro-parentheses",
+        "category": "bugprone",
+        "message_identity": "bugprone-macro-parentheses::macro argument should be enclosed in parentheses"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 13,
+        "column": 21,
+        "severity": "warning",
+        "message_text": "narrowing conversion from 'int' to signed type 'char' is implementation-defined",
+        "check_name": "bugprone-narrowing-conversions",
+        "category": "bugprone",
+        "message_identity": "bugprone-narrowing-conversions::narrowing conversion from 'X' to signed type 'X' is implementation-defined"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 14,
+        "column": 32,
+        "severity": "warning",
+        "message_text": "statement should be inside braces",
+        "check_name": "readability-braces-around-statements",
+        "category": "readability",
+        "message_identity": "readability-braces-around-statements::statement should be inside braces"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 14,
+        "column": 39,
+        "severity": "warning",
+        "message_text": "narrowing conversion from 'int' to signed type 'char' is implementation-defined",
+        "check_name": "bugprone-narrowing-conversions",
+        "category": "bugprone",
+        "message_identity": "bugprone-narrowing-conversions::narrowing conversion from 'X' to signed type 'X' is implementation-defined"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 15,
+        "column": 39,
+        "severity": "warning",
+        "message_text": "narrowing conversion from 'int' to signed type 'char' is implementation-defined",
+        "check_name": "bugprone-narrowing-conversions",
+        "category": "bugprone",
+        "message_identity": "bugprone-narrowing-conversions::narrowing conversion from 'X' to signed type 'X' is implementation-defined"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 17,
+        "column": 2,
+        "severity": "warning",
+        "message_text": "redundant return statement at the end of a function with a void return type",
+        "check_name": "readability-redundant-control-flow",
+        "category": "readability",
+        "message_identity": "readability-redundant-control-flow::redundant return statement at the end of a function with a void return type"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 22,
+        "column": 13,
+        "severity": "warning",
+        "message_text": "2 adjacent parameters of 'get_num' of similar type ('int') are easily swapped by mistake",
+        "check_name": "bugprone-easily-swappable-parameters",
+        "category": "bugprone",
+        "message_identity": "bugprone-easily-swappable-parameters::2 adjacent parameters of 'X' of similar type ('X') are easily swapped by mistake"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 44,
+        "column": 35,
+        "severity": "warning",
+        "message_text": "statement should be inside braces",
+        "check_name": "readability-braces-around-statements",
+        "category": "readability",
+        "message_identity": "readability-braces-around-statements::statement should be inside braces"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmpbf_304kx.cpp",
+        "line": 59,
+        "column": 5,
+        "severity": "error",
+        "message_text": "ISO C++17 does not allow 'register' storage class specifier",
+        "check_name": "clang-diagnostic-register",
+        "category": "other",
+        "message_identity": "clang-diagnostic-register::ISO C++17 does not allow 'X' storage class specifier"
+      }
+    ],
+    "revised_messages": [
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmp3z_4f5i3.cpp",
+        "line": 14,
+        "column": 32,
+        "severity": "warning",
+        "message_text": "statement should be inside braces",
+        "check_name": "readability-braces-around-statements",
+        "category": "readability",
+        "message_identity": "readability-braces-around-statements::statement should be inside braces"
+      },
+      {
+        "tool": "clang-tidy",
+        "file": "/tmp/tmp3z_4f5i3.cpp",
+        "line": 21,
+        "column": 13,
+        "severity": "warning",
+        "message_text": "2 adjacent parameters of 'get_num' of similar type ('int') are easily swapped by mistake",
+        "check_name": "bugprone-easily-swappable-parameters",
+        "category": "bugprone",
+        "message_identity": "bugprone-easily-swappable-parameters::2 adjacent parameters of 'X' of similar type ('X') are easily swapped by mistake"
+      }
+    ],
+    "metrics": {
+      "original_total_messages": 16,
+      "revised_total_messages": 2,
+      "old_messages_remaining": 2,
+      "new_messages_count": 0,
+      "mrr_at_pass": 0.875,
+      "new_msg_per_sample_at_pass": 0.0,
+      "line_churn_at_pass": 0.38461538461538464,
+      "original_loc": 65,
+      "revised_loc": 64,
+      "added_lines": 12,
+      "deleted_lines": 13,
+      "category_mrr": {
+        "bugprone": 0.9166666666666666,
+        "readability": 0.6666666666666666,
+        "other": 1.0
+      },
+      "original_category_counts": {
+        "bugprone": 12,
+        "performance": 0,
+        "modernize": 0,
+        "readability": 3,
+        "other": 1
+      },
+      "revised_category_counts": {
+        "bugprone": 1,
+        "performance": 0,
+        "modernize": 0,
+        "readability": 1,
+        "other": 0
+      },
+      "pass_at_1": true
+    }
+  },
+  {
+    "sample_id": "p00364_py3_0",
+    "problem_id": "p00364",
+    "split": "train",
+    "language": "py3",
+    "code": "n,x = map(int, input().split())\nmax_slope = 0.0\nfor i in range(n):\n    xi,hi = map(float, input().split())\n    slope = hi/xi\n    if slope > max_slope : max_slope = slope\nprint(x*max_slope)\n\n",
+    "linter_messages": [
+      {
+        "tool": "pylint",
+        "file": "/tmp/tmppwludiyk.py",
+        "line": 8,
+        "column": 0,
+        "severity": "warning",
+        "message_text": "Trailing newlines",
+        "check_name": "trailing-newlines",
+        "category": "readability",
+        "message_identity": "trailing-newlines::Trailing newlines"
+      },
+      {
+        "tool": "pylint",
+        "file": "/tmp/tmppwludiyk.py",
+        "line": 1,
+        "column": 0,
+        "severity": "warning",
+        "message_text": "Missing module docstring",
+        "check_name": "missing-module-docstring",
+        "category": "readability",
+        "message_identity": "missing-module-docstring::Missing module docstring"
+      },
+      {
+        "tool": "pylint",
+        "file": "/tmp/tmppwludiyk.py",
+        "line": 6,
+        "column": 4,
+        "severity": "warning",
+        "message_text": "Consider using 'max_slope = max(max_slope, slope)' instead of unnecessary if block",
+        "check_name": "consider-using-max-builtin",
+        "category": "modernize",
+        "message_identity": "consider-using-max-builtin::Consider using 'X' instead of unnecessary if block"
+      },
+      {
+        "tool": "pylint",
+        "file": "/tmp/tmppwludiyk.py",
+        "line": 6,
+        "column": 27,
+        "severity": "warning",
+        "message_text": "More than one statement on a single line",
+        "check_name": "multiple-statements",
+        "category": "readability",
+        "message_identity": "multiple-statements::More than one statement on a single line"
+      }
+    ],
+    "linter_message_count": 4,
+    "original_loc": 7,
+    "compile_ok": true,
+    "source": "AIZU",
+    "title": "Bange Hills Tower",
+    "generator": "#include \"testlib.h\"\n#include <bits/stdc++.h>\nusing namespace std;\n\nint main(int argc, char* argv[]) {\n    registerGen(argc, argv, 1);\n\n    int n = opt<int>(\"n\"); // number of buildings\n    int t = opt<int>(\"t\"); // tower position\n    string type = opt<string>(\"type\", \"random\"); // type of test case\n\n    vector<int> x(n);\n    vector<int> h(n);\n\n    if (type == \"random\") {\n        // Generate n distinct x_i in [1, t - 1]\n        if (n > t - 1) {\n            fprintf(stderr, \"Cannot generate %d distinct x_i in [1, %d]\\n\", n, t - 1);\n            return 1;\n        }\n        vector<int> xs(t - 1);\n        for (int i = 1; i < t; ++i) {\n            xs[i - 1] = i;\n        }\n        shuffle(xs.begin(), xs.end());\n        for (int i = 0; i < n; ++i) {\n            x[i] = xs[i];\n            h[i] = rnd.next(1, 100);\n        }\n    } else if (type == \"max_height\") {\n        // All h_i = 100\n        if (n > t - 1) {\n            fprintf(stderr, \"Cannot generate %d distinct x_i in [1, %d]\\n\", n, t - 1);\n            return 1;\n        }\n        vector<int> xs(t - 1);\n        for (int i = 1; i < t; ++i) {\n            xs[i - 1] = i;\n        }\n        shuffle(xs.begin(), xs.end());\n        for (int i = 0; i < n; ++i) {\n            x[i] = xs[i];\n            h[i] = 100;\n        }\n    } else if (type == \"min_height\") {\n        // All h_i = 1\n        if (n > t - 1) {\n            fprintf(stderr, \"Cannot generate %d distinct x_i in [1, %d]\\n\", n, t - 1);\n            return 1;\n        }\n        vector<int> xs(t - 1);\n        for (int i = 1; i < t; ++i) {\n            xs[i - 1] = i;\n        }\n        shuffle(xs.begin(), xs.end());\n        for (int i = 0; i < n; ++i) {\n            x[i] = xs[i];\n            h[i] = 1;\n        }\n    } else if (type == \"close_to_keep\") {\n        // x_i near 1\n        if (n > t - 1) {\n            fprintf(stderr, \"Cannot generate %d distinct x_i near 1 when t=%d\\n\", n, t);\n            return 1;\n        }\n        for (int i = 0; i < n; ++i) {\n            x[i] = i + 1; // x_i from 1 up\n            h[i] = rnd.next(1, 100);\n        }\n    } else if (type == \"close_to_tower\") {\n        // x_i near t - 1\n        if (n > t - 1) {\n            fprintf(stderr, \"Cannot generate %d distinct x_i near t-1 when t=%d\\n\", n, t);\n            return 1;\n        }\n        for (int i = 0; i < n; ++i) {\n            x[i] = t - 1 - i; // x_i from t-1 down\n            h[i] = rnd.next(1, 100);\n        }\n    } else if (type == \"increasing_x\") {\n        // x_i increasing from 1 to t - 1\n        if (n > t - 1) {\n            fprintf(stderr, \"Cannot generate %d increasing x_i when t=%d\\n\", n, t);\n            return 1;\n        }\n        for (int i = 0; i < n; ++i) {\n            x[i] = i + 1;\n            h[i] = rnd.next(1, 100);\n        }\n    } else if (type == \"decreasing_x\") {\n        // x_i decreasing from t - 1 to 1\n        if (n > t - 1) {\n            fprintf(stderr, \"Cannot generate %d decreasing x_i when t=%d\\n\", n, t);\n            return 1;\n        }\n        for (int i = 0; i < n; ++i) {\n            x[i] = t - 1 - i;\n            h[i] = rnd.next(1, 100);\n        }\n    } else if (type == \"max_htower\") {\n        // Buildings that force maximum H_tower\n        // Place buildings at x_i close to 1 with maximum h_i\n        if (n > t - 1) {\n            fprintf(stderr, \"Cannot generate %d x_i when t=%d\\n\", n, t);\n            return 1;\n        }\n        for (int i = 0; i < n; ++i) {\n            x[i] = 1 + i % (t - 1);\n            h[i] = 100;\n        }\n    } else {\n        fprintf(stderr, \"Unknown type: %s\\n\", type.c_str());\n        return 1;\n    }\n\n    // Output the test case\n    printf(\"%d %d\\n\", n, t);\n    for (int i = 0; i < n; ++i) {\n        printf(\"%d %d\\n\", x[i], h[i]);\n    }\n\n    return 0;\n}\n",
+    "generator_cmd": "# Smallest possible n and t\n./gen -n 1 -t 2 -type random\n# Small n, small t\n./gen -n 2 -t 5 -type random\n./gen -n 5 -t 10 -type random\n# Medium n, medium t\n./gen -n 500 -t 1000 -type random\n./gen -n 500 -t 1000 -type max_height\n./gen -n 500 -t 1000 -type min_height\n./gen -n 500 -t 1000 -type close_to_keep\n./gen -n 500 -t 1000 -type close_to_tower\n./gen -n 500 -t 1000 -type increasing_x\n./gen -n 500 -t 1000 -type decreasing_x\n./gen -n 500 -t 1000 -type max_htower\n# Maximum n, maximum t\n./gen -n 1000 -t 100000 -type random\n./gen -n 1000 -t 100000 -type max_height\n./gen -n 1000 -t 100000 -type min_height\n./gen -n 1000 -t 100000 -type close_to_keep\n./gen -n 1000 -t 100000 -type close_to_tower\n./gen -n 1000 -t 100000 -type increasing_x\n./gen -n 1000 -t 100000 -type decreasing_x\n./gen -n 1000 -t 100000 -type max_htower\n# Edge cases with n equals t - 1\n./gen -n 999 -t 1000 -type random\n./gen -n 999 -t 1000 -type max_height\n# Edge cases with n equals 1\n./gen -n 1 -t 100000 -type random\n./gen -n 1 -t 100000 -type max_height\n# Cases with t just above n\n./gen -n 1000 -t 1001 -type random\n# Cases with x_i close to 1\n./gen -n 1000 -t 100001 -type close_to_keep\n# Cases with x_i close to t - 1\n./gen -n 1000 -t 100001 -type close_to_tower\n# Cases to test maximum H_tower\n./gen -n 10 -t 100000 -type max_htower\n./gen -n 1000 -t 100000 -type max_htower\n# Random small cases\n./gen -n 100 -t 200 -type random\n./gen -n 200 -t 500 -type random\n# Random large cases\n./gen -n 900 -t 100000 -type random\n./gen -n 950 -t 100000 -type random\n",
+    "checker": "#include \"testlib.h\"\n#include <bits/stdc++.h>\nusing namespace std;\n\nint main(int argc, char* argv[]) {\n    registerTestlibCmd(argc, argv);\n\n    // Read the correct answer from the jury's answer file\n    double juryAnswer = ans.readDouble();\n    // Read the participant's answer from the contestant's output file\n    double participantAnswer = ouf.readDouble();\n\n    // Calculate the absolute difference\n    double diff = fabs(juryAnswer - participantAnswer);\n\n    // Allowable error margin\n    const double MAX_ERROR = 1e-3 + 1e-10; // Adding a small epsilon to handle floating point inaccuracies\n\n    // Check if the absolute difference exceeds the allowable error margin\n    if (diff > MAX_ERROR) {\n        quitf(_wa, \"Wrong answer: expected %.10f, found %.10f, difference %.10f exceeds allowable error %.10f\", \n              juryAnswer, participantAnswer, diff, 1e-3);\n    } else {\n        quitf(_ok, \"Correct answer within allowable error margin: participant's answer = %.10f\", participantAnswer);\n    }\n}\n",
+    "validator": "#include \"testlib.h\"\n#include <bits/stdc++.h>\nusing namespace std;\nint main(int argc, char* argv[]) {\n    registerValidation(argc, argv);\n    int N = inf.readInt(1, 1000, \"N\");\n    inf.readSpace();\n    int t = inf.readInt(2, 100000, \"t\");\n    inf.readEoln();\n    set<int> x_set;\n    for (int i = 1; i <= N; ++i) {\n        string xi_name = \"x_\" + to_string(i);\n        string hi_name = \"h_\" + to_string(i);\n        int x_i = inf.readInt(1, t - 1, xi_name.c_str());\n        inf.readSpace();\n        int h_i = inf.readInt(1, 100, hi_name.c_str());\n        inf.readEoln();\n        ensuref(x_set.count(x_i) == 0, \"x_%d (%d) is repeated\", i, x_i);\n        x_set.insert(x_i);\n    }\n    inf.readEof();\n    return 0;\n}\n",
+    "revised_code": "n, x = map(int, input().split())\nmax_slope = 0.0\nfor i in range(n):\n    xi, hi = map(float, input().split())\n    slope = hi / xi\n    max_slope = max(max_slope, slope)\nprint(x * max_slope)",
+    "raw_response": "n, x = map(int, input().split())\nmax_slope = 0.0\nfor i in range(n):\n    xi, hi = map(float, input().split())\n    slope = hi / xi\n    max_slope = max(max_slope, slope)\nprint(x * max_slope)",
+    "tokens_used": 541,
+    "error": null,
+    "extraction_ok": true,
+    "revision_error": null,
+    "pass_at_1": true,
+    "validation_error": null,
+    "original_messages": [
+      {
+        "tool": "pylint",
+        "file": "/tmp/tmppwludiyk.py",
+        "line": 8,
+        "column": 0,
+        "severity": "warning",
+        "message_text": "Trailing newlines",
+        "check_name": "trailing-newlines",
+        "category": "readability",
+        "message_identity": "trailing-newlines::Trailing newlines"
+      },
+      {
+        "tool": "pylint",
+        "file": "/tmp/tmppwludiyk.py",
+        "line": 1,
+        "column": 0,
+        "severity": "warning",
+        "message_text": "Missing module docstring",
+        "check_name": "missing-module-docstring",
+        "category": "readability",
+        "message_identity": "missing-module-docstring::Missing module docstring"
+      },
+      {
+        "tool": "pylint",
+        "file": "/tmp/tmppwludiyk.py",
+        "line": 6,
+        "column": 4,
+        "severity": "warning",
+        "message_text": "Consider using 'max_slope = max(max_slope, slope)' instead of unnecessary if block",
+        "check_name": "consider-using-max-builtin",
+        "category": "modernize",
+        "message_identity": "consider-using-max-builtin::Consider using 'X' instead of unnecessary if block"
+      },
+      {
+        "tool": "pylint",
+        "file": "/tmp/tmppwludiyk.py",
+        "line": 6,
+        "column": 27,
+        "severity": "warning",
+        "message_text": "More than one statement on a single line",
+        "check_name": "multiple-statements",
+        "category": "readability",
+        "message_identity": "multiple-statements::More than one statement on a single line"
+      }
+    ],
+    "revised_messages": [
+      {
+        "tool": "pylint",
+        "file": "/tmp/tmp78ikbb4y.py",
+        "line": 7,
+        "column": 0,
+        "severity": "warning",
+        "message_text": "Final newline missing",
+        "check_name": "missing-final-newline",
+        "category": "readability",
+        "message_identity": "missing-final-newline::Final newline missing"
+      },
+      {
+        "tool": "pylint",
+        "file": "/tmp/tmp78ikbb4y.py",
+        "line": 1,
+        "column": 0,
+        "severity": "warning",
+        "message_text": "Missing module docstring",
+        "check_name": "missing-module-docstring",
+        "category": "readability",
+        "message_identity": "missing-module-docstring::Missing module docstring"
+      }
+    ],
+    "metrics": {
+      "original_total_messages": 4,
+      "revised_total_messages": 2,
+      "old_messages_remaining": 1,
+      "new_messages_count": 1,
+      "mrr_at_pass": 0.5,
+      "new_msg_per_sample_at_pass": 1.0,
+      "line_churn_at_pass": 1.375,
+      "original_loc": 8,
+      "revised_loc": 7,
+      "added_lines": 5,
+      "deleted_lines": 6,
+      "category_mrr": {
+        "modernize": 1.0,
+        "readability": 0.3333333333333333
+      },
+      "original_category_counts": {
+        "bugprone": 0,
+        "performance": 0,
+        "modernize": 1,
+        "readability": 3,
+        "other": 0
+      },
+      "revised_category_counts": {
+        "bugprone": 0,
+        "performance": 0,
+        "modernize": 0,
+        "readability": 2,
+        "other": 0
+      },
+      "pass_at_1": true
+    }
+  },
+  {
+    "sample_id": "p00330_java_0",
+    "problem_id": "p00330",
+    "split": "valid",
+    "language": "java",
+    "code": "import java.*;\n\nclass Main{\n public static void main(String args[]){\n  Scanner sc = new Scanner(System.in);\n\n  int W=sc.nextInt();\n\n  System.out.println(W*4);\n }\n}",
+    "linter_messages": [
+      {
+        "tool": "pmd",
+        "file": "/tmp/tmp87_8gvmk.java",
+        "line": 7,
+        "column": 7,
+        "severity": "error",
+        "message_text": "The local variable name 'W' doesn't match '[a-z][a-zA-Z0-9]*'",
+        "check_name": "LocalVariableNamingConventions",
+        "category": "readability",
+        "message_identity": "LocalVariableNamingConventions::The local variable name 'X' doesn'X'[a-z][a-zA-Z0-9]*'"
+      }
+    ],
+    "linter_message_count": 1,
+    "original_loc": 8,
+    "compile_ok": false,
+    "source": "AIZU",
+    "title": "Word",
+    "generator": "#include \"testlib.h\"\n#include <bits/stdc++.h>\nusing namespace std;\nint main(int argc, char* argv[]) {\n    registerGen(argc, argv, 1);\n\n    // Read parameters\n    int W = opt<int>(\"W\", -1);\n    string type = opt<string>(\"type\", \"random\");\n\n    if (W == -1) {\n        // Generate W based on type\n        if (type == \"min\") {\n            W = 0;\n        } else if (type == \"max\") {\n            W = 100;\n        } else if (type == \"small\") {\n            W = rnd.next(1, 10);\n        } else if (type == \"large\") {\n            W = rnd.next(90, 100);\n        } else if (type == \"random\") {\n            W = rnd.next(0, 100);\n        } else {\n            // If an unknown type is specified, exit with an error\n            ensuref(false, \"Unknown type: %s\", type.c_str());\n        }\n    } else {\n        // If W is specified, check that it is within the constraints\n        ensuref(0 <= W && W <= 100, \"W must be in the range [0, 100], but W=%d\", W);\n    }\n\n    // Output W\n    printf(\"%d\\n\", W);\n\n    return 0;\n}\n",
+    "generator_cmd": "./gen -W 0\n./gen -W 1\n./gen -W 2\n./gen -W 4\n./gen -W 8\n./gen -W 12\n./gen -W 16\n./gen -W 31\n./gen -W 32\n./gen -W 33\n./gen -W 64\n./gen -W 96\n./gen -W 99\n./gen -W 100\n\n./gen -type min\n./gen -type max\n\n./gen -type small\n./gen -type small\n./gen -type small\n\n./gen -type large\n./gen -type large\n./gen -type large\n\n./gen -type random\n./gen -type random\n./gen -type random\n./gen -type random\n./gen -type random\n",
+    "checker": "#include \"testlib.h\"\r\n\r\nusing namespace std;\r\n\r\nint main(int argc, char *argv[]) {\r\n    setName(\"compare ordered sequences of signed int%d numbers\", 8 * int(sizeof(long long)));\r\n\r\n    registerTestlibCmd(argc, argv);\r\n\r\n    int n = 0;\r\n    string firstElems;\r\n\r\n    while (!ans.seekEof() && !ouf.seekEof()) {\r\n        n++;\r\n        long long j = ans.readLong();\r\n        long long p = ouf.readLong();\r\n        if (j != p)\r\n            quitf(_wa, \"%d%s numbers differ - expected: '%s', found: '%s'\", n, englishEnding(n).c_str(),\r\n                  vtos(j).c_str(), vtos(p).c_str());\r\n        else if (n <= 5) {\r\n            if (firstElems.length() > 0)\r\n                firstElems += \" \";\r\n            firstElems += vtos(j);\r\n        }\r\n    }\r\n\r\n    int extraInAnsCount = 0;\r\n\r\n    while (!ans.seekEof()) {\r\n        ans.readLong();\r\n        extraInAnsCount++;\r\n    }\r\n\r\n    int extraInOufCount = 0;\r\n\r\n    while (!ouf.seekEof()) {\r\n        ouf.readLong();\r\n        extraInOufCount++;\r\n    }\r\n\r\n    if (extraInAnsCount > 0)\r\n        quitf(_wa, \"Answer contains longer sequence [length = %d], but output contains %d elements\",\r\n              n + extraInAnsCount, n);\r\n\r\n    if (extraInOufCount > 0)\r\n        quitf(_wa, \"Output contains longer sequence [length = %d], but answer contains %d elements\",\r\n              n + extraInOufCount, n);\r\n\r\n    if (n <= 5)\r\n        quitf(_ok, \"%d number(s): \\\"%s\\\"\", n, compress(firstElems).c_str());\r\n    else\r\n        quitf(_ok, \"%d numbers\", n);\r\n}",
+    "validator": "#include \"testlib.h\"\n#include <bits/stdc++.h>\nusing namespace std;\nint main(int argc, char* argv[]) {\n    registerValidation(argc, argv);\n    int W = inf.readInt(0, 100, \"W\");\n    inf.readEoln();\n    inf.readEof();\n    return 0;\n}\n",
+    "revised_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int w = sc.nextInt();\n        System.out.println(w * 4);\n    }\n}",
+    "raw_response": "```java\nimport java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int w = sc.nextInt();\n        System.out.println(w * 4);\n    }\n}\n```",
+    "tokens_used": 426,
+    "error": null,
+    "extraction_ok": true,
+    "revision_error": null,
+    "pass_at_1": false,
+    "validation_error": "javac not found -- JDK is not installed",
+    "original_messages": [
+      {
+        "tool": "pmd",
+        "file": "/tmp/tmp87_8gvmk.java",
+        "line": 7,
+        "column": 7,
+        "severity": "error",
+        "message_text": "The local variable name 'W' doesn't match '[a-z][a-zA-Z0-9]*'",
+        "check_name": "LocalVariableNamingConventions",
+        "category": "readability",
+        "message_identity": "LocalVariableNamingConventions::The local variable name 'X' doesn'X'[a-z][a-zA-Z0-9]*'"
+      }
+    ],
+    "revised_messages": [],
+    "metrics": null,
+    "validation": {
+      "pass_at_1": false,
+      "compile_ok": true,
+      "tests_generated": 0,
+      "tests_passed": 0,
+      "tests_failed": 0
+    }
+  }
+]

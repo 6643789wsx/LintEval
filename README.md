@@ -1,203 +1,316 @@
 # LintEval: Linter-Guided Code Refactoring Benchmark
 
-LintEval is a multi-language benchmark for evaluating whether large language models (LLMs) can **refactor code based on linter feedback while preserving functionality**.
+**Can a model fix the warnings a linter reports without breaking the code?**
 
-**LintEval-Full**: 13,061 samples across C++ / Python / Java (3,999 problems, 171,662 lint alerts).
-**LintEval-Lite**: a stratified 498-sample split used for model evaluation.
+LintEval is a multi-language benchmark for *linter-guided refactoring*: each sample is a
+compilable, test-passing competitive-programming submission together with the static-analysis
+messages it triggers. A model must return a revised version that (1) removes or reduces those
+messages and (2) still compiles and passes every generated unit test.
 
-## What problem does this repository solve?
+| Split | Samples | Problems | Languages | Alerts |
+|---|---:|---:|---|---:|
+| **LintEval-Full** (`full/`) | 13,061 | 3,999 | C++ / Python / Java | 171,662 |
+| **LintEval-Lite** (`lite/`) | 498 | — | C++ (244) / Python (203) / Java (51) | stratified evaluation split |
 
-Static-analysis linters (clang-tidy, pylint, PMD) detect code-quality issues, but it is unclear whether LLMs can *act* on their alerts without breaking the code. Existing benchmarks measure code generation or repair, not *linter-guided refactoring* with functional verification.
+Samples are derived from CodeContests+ (Codeforces problems) with testlib-based
+generators/checkers, so correctness is verified by actually running the code.
 
-LintEval asks a model to take original code + its linter messages, and produce a revised version that (1) removes or reduces the reported alerts and (2) still passes all unit tests.
+---
 
-## How does it work?
+## Quickstart (one command)
 
-Each sample is a competitive-programming submission (from CodeContests+, based on Codeforces) that:
+```bash
+git clone <this-repo> && cd LintEval
+pip install -r requirements.txt
 
-- compiles and passes all tests,
-- carries at least one linter alert from one of five categories (error-prone, performance, refactor, style, other).
+# credentials for any OpenAI-compatible endpoint (PKU MaaS shown here)
+export pku_maas_base_url=https://chat.pku.edu.cn/v1
+export pku_maas_api_key=sk-...
 
-Evaluation of a model output is a three-step pipeline:
+python scripts/smoke_test.py            # 1 sample, full pipeline, ~30 s
+```
 
-1. **Compile + test** — the revised code must compile (g++/javac/python3) and pass the generated unit tests, validated with a testlib-based generator/checker loop (`pass@1`).
-2. **Re-lint** — the revised code is scanned again; the change in linter messages is measured.
-3. **Metrics** — aggregated over passing samples only:
+Real output of the smoke test:
+
+```
+sample_id=p00364_py3_0  problem=p00364  original linter messages=4
+  API 1/1 (17s, ETA 0s)
+Smoke test summary
+  model            : smoke_gpt-6-luna
+  samples          : 1
+  compile + tests  : PASS
+  tests generated  : 32
+  linter messages  : 4 -> 1 (new: 1)
+  pass@1           : 1.0
+  MRR@P            : 0.75
+SMOKE TEST PASSED
+```
+
+The smoke test runs *generation → code extraction → re-lint → compile → unit tests → metrics* on
+one sample of `lite/linteval_lite.jsonl`. It reads its credentials from the environment, so no
+key ever appears on the command line:
+
+| Variable | Meaning | Default |
+|---|---|---|
+| `pku_maas_base_url` / `PKU_MAAS_BASE_URL` | OpenAI-compatible base URL | — |
+| `pku_maas_api_key` / `PKU_MAAS_API_KEY` | API key | — |
+| `pku_maas_model_name` / `PKU_MAAS_MODEL_NAME` | model id | `gpt-6-luna` |
+
+`scripts/smoke_test.py --language java|cpp` switches language; `--model` overrides the model id.
+`CUSTOM_API_KEY` / `CUSTOM_BASE_URL` / `CUSTOM_MODEL_ID` and `DEEPSEEK_API_KEY` are accepted too.
+
+---
+
+## Data
+
+```
+full/
+├── linteval_full.parquet        # 26 MB  – 13,061 samples (recommended)
+├── linteval_full.jsonl.part1    # 78 MB  ┐ three line-aligned shards, each < GitHub's
+├── linteval_full.jsonl.part2    # 78 MB  ├ 100 MB per-file limit; concatenate to get
+├── linteval_full.jsonl.part3    # 78 MB  ┘ a single linteval_full.jsonl (233 MB)
+└── preview.json                 # 3 full records (one per language)
+lite/
+├── linteval_lite.parquet        # 1.9 MB – 498 samples
+├── linteval_lite.jsonl          # 11 MB
+├── demo_100.jsonl               # 100-sample stratified demo (quick experiments)
+└── preview.json                 # 3 full records (one per language)
+```
+
+`preview.json` lets you inspect the schema (including the nested linter messages and test
+harness code) without downloading anything.
+
+### Loading
+
+```python
+# Parquet (recommended)
+from datasets import load_dataset
+full = load_dataset("parquet", data_files="full/linteval_full.parquet", split="train")
+lite = load_dataset("parquet", data_files="lite/linteval_lite.parquet", split="train")
+
+# or pandas / plain JSONL
+import pandas as pd, json
+df = pd.read_parquet("lite/linteval_lite.parquet")
+records = [json.loads(l) for l in open("lite/linteval_lite.jsonl", encoding="utf-8")]
+```
+
+```bash
+# rebuild the Parquet files and previews from the JSONL sources
+python scripts/build_dataset_files.py
+python scripts/build_dataset_files.py --check     # verify without writing
+# merge the three full-dataset shards
+python scripts/split_dataset.py --merge           # -> full/linteval_full.jsonl
+```
+
+### Record schema (26 fields)
+
+| Field | Type | Description |
+|---|---|---|
+| `sample_id` | str | unique id, e.g. `p00364_py3_0` |
+| `problem_id` | str | source problem id |
+| `language` | str | `cpp` \| `py3` \| `java` |
+| `code` | str | the original submission (**input**) |
+| `linter_messages` | list[dict] | alerts for `code`: `tool`, `line`, `column`, `severity`, `message`, `check`/`rule` |
+| `linter_message_count` | int | number of alerts for `code` |
+| `original_loc` | int | lines of code |
+| `compile_ok` | bool | `code` compiles |
+| `source`, `title` | str | provenance (Codeforces) |
+| `generator`, `generator_cmd`, `checker`, `validator` | str | testlib harness; `generator_cmd` are the generator invocations |
+| `revised_code`, `raw_response`, `tokens_used` | str/str/int | **reference revision** produced by DeepSeek-v3.2 and its raw response |
+| `error`, `extraction_ok`, `revision_error` | misc | reference-revision diagnostics |
+| `pass_at_1`, `validation_error` | bool/misc | reference revision passed compile + tests |
+| `original_messages`, `revised_messages` | list[dict] | alerts before/after the reference revision |
+| `metrics` | dict | reference-revision metrics (MRR, new messages, line churn, per-category counts) |
+| `split` | str | **problem-level** construction split of the source problem (`train`/`valid`/`test`) |
+
+Two notes on the released files:
+
+* `split` is provenance for the *problem*, **not** the evaluation split. Every record of the file
+  you pass is evaluated; never filter on this field (see `CHANGELOG.md`).
+* Nested fields are stored with a unified Arrow schema, so a key that is absent for a given record
+  (e.g. a linter category with no alerts) appears as `null` in Parquet. Values are unchanged.
+
+The reference revision fields (`revised_code`, `metrics`, …) are provided for analysis and for the
+baselines reported in the paper; a model submission is **never** given them at inference time.
+
+---
+
+## Evaluation
+
+Everything is driven by `scripts/10_eval_models.py` (and the `scripts/smoke_test.py` wrapper).
+
+### Hosted models (any OpenAI-compatible API)
+
+```bash
+# PKU MaaS with gpt-6-luna (default when PKU_MAAS_* are set)
+export pku_maas_base_url=https://chat.pku.edu.cn/v1
+export pku_maas_api_key=sk-...
+python scripts/10_eval_models.py --custom_api --model gpt-6-luna \
+    --data_path lite/linteval_lite.jsonl --limit 100
+
+# DeepSeek
+export DEEPSEEK_API_KEY=sk-...
+python scripts/10_eval_models.py --deepseek --data_path lite/linteval_lite.jsonl
+
+# any other OpenAI-compatible endpoint
+python scripts/10_eval_models.py --custom_api \
+    --base_url https://api.example.com/v1 --api_key sk-... \
+    --api_model_id my-model --data_path lite/linteval_lite.jsonl
+```
+
+### Local models (vLLM)
+
+```bash
+python scripts/10_eval_models.py --model_name Qwen2.5-Coder-7B \
+    --model_path /path/to/Qwen2.5-Coder-7B-Instruct \
+    --data_path lite/linteval_lite.jsonl --gpu 0 --tp 1
+```
+
+### Full dataset (13,061 samples)
+
+```bash
+python scripts/split_dataset.py --merge                       # once
+python scripts/10_eval_models.py --custom_api --model gpt-6-luna \
+    --data_path full/linteval_full.jsonl                        # or full/linteval_full.parquet
+```
+
+### Key options
+
+| Option | Meaning |
+|---|---|
+| `--custom_api` | evaluate any OpenAI-compatible endpoint |
+| `--model` / `--api_model_id` | model id sent to the endpoint |
+| `--data_path` | `.jsonl` **or** `.parquet`, any split |
+| `--limit N`, `--n_workers N`, `--api_timeout S` | sample cap, concurrency, per-request timeout (default 300 s) |
+| `--model_name` + `--model_path`, `--gpu`, `--tp` | local vLLM evaluation |
+| `--deepseek` | DeepSeek via `DEEPSEEK_API_KEY` |
+| `--no_message`, `--ablation_mode=...` | ablations (no alerts / rule-only / message-only / shuffled) |
+| `--resume_failed` | re-run only API-generation failures of an existing result file |
+
+Results are written to `eval_results/<model>.json`:
+
+```json
+{"model": "...", "total_entries": 498, "timestamp": "...",
+ "summary": {"pass@1": 0.57, "avg_mrr_at_pass": 0.61, "new_msg_per_sample_at_pass": 0.70,
+             "lpm_p": 5.95, "line_churn_at_pass": 0.99, "mrr_at_pass_by_category": {...}},
+ "results": [{"sample_id": "...", "language": "cpp", "pass": true, "in_total": 6, "out_total": 2,
+              "new_msg_count": 1, "mrr_at_pass": 1.0, "added_lines": 3, "deleted_lines": 2, ...}]}
+```
+
+### Metrics
+
+Computed over samples that pass compile + tests:
 
 | Metric | Definition |
 |---|---|
-| Pass@1 | fraction of samples whose revised code passes all tests |
-| Reduction@P | Σ(in − out) / Σ(in) over passed samples |
-| New@P | Σ(newly introduced alerts) / Σ(in) over passed samples |
-| ΔLine@P | average lines changed over passed samples |
-| LinePerFix@P | Σ(lines changed) / Σ(alerts fixed) over passed samples |
+| Pass@1 | fraction of samples whose revised code compiles and passes all generated tests |
+| Reduction@P / MRR@P | Σ(in − out) / Σ(in) over passed samples |
+| New@P | newly introduced alerts / alerts in the original code |
+| ΔLine@P | average number of changed lines |
+| LinePerFix@P | changed lines per alert fixed |
 
-## Main results (LintEval-Lite, 498 samples)
+---
+
+## Environment
+
+Python ≥ 3.8 plus these system tools (each is found on `PATH` or via env vars
+`CLANG_TIDY_BIN`, `PYLINT_BIN`, `PMD_BIN`, `JAVAC_BIN`, `GPP_BIN`, `TESTLIB_INCLUDE`):
+
+| Language | Linter | Compiler/runtime |
+|---|---|---|
+| C++ | `clang-tidy` | `g++` |
+| Python | `pylint` (installed by `requirements.txt`) | `python3` |
+| Java | [PMD](https://pmd.github.io/) 7.x | `javac`, `java` |
+
+```bash
+source setup_env.sh              # exports tool paths + PYTHONPATH
+python scripts/test_environment.py   # verifies packages, tools and repository layout
+python scripts/sanity_check.py       # end-to-end pipeline check without any API call
+```
+
+The Python smoke needs only `pylint`; C++ smoke additionally needs `clang-tidy`.
+
+---
+
+## Reproducing the released numbers
+
+`eval_results/*.json` contains the per-sample results behind the paper tables; regenerate them with
+
+```bash
+python scripts/11_gen_paper_excel.py     # -> docs/table/*.tex
+```
+
+Reference revisions were produced with greedy decoding (temperature 0.0, max 4,096 tokens).
+Linter versions slightly change diagnostics; the paper reports clang-tidy 22.1, PMD 7.12.0,
+pylint 4.0.5, g++ 13.3/15.2, OpenJDK 21/23.
+
+### Main results (LintEval-Lite, 498 samples)
 
 | Model | Pass@1 ↑ | Reduction@P ↑ | New@P ↓ | ΔLine@P ↓ | LinePerFix@P ↓ |
 |---|---|---|---|---|---|
-| Copy-Original | 100.0% | 0.0% | 0.0% | 0.0 | -- |
+| Copy-Original | 100.0% | 0.0% | 0.0% | 0.0 | — |
 | Rule-Based Fixers | **76.3%** | 25.9% | **0.6%** | 71.4 | 20.4 |
 | GPT-5.2 | 67.1% | 87.8% | 7.3% | 71.7 | 6.8 |
 | GPT-5.4-mini | 68.3% | **90.4%** | 5.6% | 60.2 | **5.2** |
 | DeepSeek-v3.2 | 57.6% | 73.0% | 6.7% | 45.4 | 5.5 |
 | Qwen2.5-Coder-32B | 61.7% | 57.1% | 8.1% | 33.3 | 5.7 |
 | Qwen2.5-Coder-7B | 53.0% | 24.7% | 12.7% | 32.5 | 8.9 |
-| Qwen2.5-Coder-3B | 52.0% | 9.5% | 11.2% | 27.9 | 15.0 |
 | Qwen2.5-Coder-0.5B | 48.8% | −1.2% | 10.5% | **17.2** | 21.5 |
-| Llama-3.2-3B | 38.8% | 19.8% | 13.5% | 29.8 | 11.0 |
 | Llama-3.2-1B | 33.7% | 0.5% | 13.8% | 23.5 | 19.6 |
 
-Findings: large API models remove most alerts without breaking tests; smaller open models trade correctness for alert reduction, and can introduce new alerts (negative reduction).
+---
 
-All released per-sample results are in [`eval_results/`](eval_results/), and the paper tables are in [`docs/table/`](docs/table/). Run `python scripts/11_gen_paper_excel.py` to regenerate them.
+## Publishing the datasets to the Hugging Face Hub
 
-## Repository structure
+```bash
+pip install -U huggingface_hub
+huggingface-cli login
+
+# two dataset repositories, mirroring the folder layout
+huggingface-cli upload <user>/LintEval-full full/ --repo-type dataset
+huggingface-cli upload <user>/LintEval-lite lite/ --repo-type dataset
+```
+
+Every file is already Hub-ready: Parquet for `load_dataset("<user>/LintEval-lite")`, JSONL for
+streaming consumers, `preview.json` for quick inspection.
+
+---
+
+## Repository layout
 
 ```
-.
-├── README.md                 # this file
-├── setup_env.sh              # environment setup (auto-detects repo root)
-├── requirements.txt          # Python dependencies
-├── configs/                  # linter & dataset configuration (YAML)
-├── src/                      # core library
-│   ├── linter_{cpp,python,java}.py   # clang-tidy / pylint / PMD wrappers
-│   ├── linter_factory.py     # unified linter dispatch
-│   ├── test_runner_{cpp,multi}.py    # testlib compile + test validation loop
-│   └── metrics.py            # Pass@1, Reduction@P, New@P, ΔLine@P, LinePerFix@P
+├── README.md                  this file
+├── CHANGELOG.md               release history
+├── LICENSE                    MIT
+├── requirements.txt
+├── setup_env.sh               tool paths + PYTHONPATH
+├── configs/                   linter and dataset configuration
+├── src/                       linter wrappers, testlib runner, metrics, prompts
 ├── scripts/
-│   ├── test_environment.py   # verify environment
-│   ├── sanity_check.py       # quick end-to-end check on demo_100
-│   ├── 10_eval_models.py     # ★ main evaluation script (local vLLM / API)
-│   ├── 01~05_*.py            # dataset construction pipeline (optional)
-│   ├── 11_gen_paper_excel.py # regenerate LaTeX tables from eval_results
-│   └── gen_tab/              # table generation modules
-├── data/
-│   ├── demo_100.jsonl        # 100-sample demo (stratified, eval format)
-│   ├── linteval_lite_test.jsonl   # LintEval-Lite test set (498 samples)
-│   ├── linteval_full.jsonl.part{1,2,3}  # LintEval-Full (13,061 samples, split
-│   │                        # into 3 shards to stay under GitHub's 100 MB limit)
-│   └── (linteval_full.jsonl  # merged locally via scripts/split_dataset.py --merge)
-├── eval_results/             # released per-sample results for all models
-├── tools/testlib.h           # required for C++ generator/checker compilation
-└── docs/table/               # generated LaTeX tables
+│   ├── smoke_test.py          ★ one-command end-to-end check (PKU MaaS / gpt-6-luna)
+│   ├── 10_eval_models.py      ★ main evaluator (API + vLLM)
+│   ├── build_dataset_files.py regenerate Parquet + preview.json
+│   ├── split_dataset.py       split/merge the full JSONL
+│   ├── test_environment.py    environment check
+│   ├── sanity_check.py        pipeline check without API
+│   ├── 11_gen_paper_excel.py  regenerate LaTeX tables
+│   └── 01…05_*.py             optional dataset-construction pipeline
+├── tools/testlib.h            required for C++ generator/checker compilation
+├── full/  lite/               released datasets (Parquet + JSONL + preview)
+├── eval_results/              released per-sample results
+└── docs/table/                generated LaTeX tables
 ```
 
-## Environment setup
+---
 
-System requirements: Python ≥ 3.8, `clang-tidy`, `g++`, `pylint`, PMD 7.x, `javac`/`java`.
+## License and data provenance
 
-```bash
-# 1. Python dependencies
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-
-# 2. Tool paths (optional — everything falls back to PATH lookups)
-source setup_env.sh
-
-# 3. Verify
-python scripts/test_environment.py
-```
-
-PMD is not installed by pip; download it from <https://pmd.github.io/> (7.x) and either put `pmd` on PATH or set `PMD_BIN`.
-
-## Running evaluation
-
-### Quick sanity check (100-sample demo)
-
-```bash
-python scripts/sanity_check.py
-```
-
-This runs the linters, the metrics, and the testlib validation loop on `data/demo_100.jsonl` to confirm the environment works.
-
-### Evaluate a model on the demo (100 samples)
-
-```bash
-# Local model via vLLM
-python scripts/10_eval_models.py \
-    --model_name Qwen2.5-Coder-7B \
-    --model_path /path/to/Qwen2.5-Coder-7B-Instruct \
-    --data_path data/demo_100.jsonl \
-    --limit 100 --gpu 0
-
-# API model (OpenAI-compatible, e.g. DeepSeek)
-export DEEPSEEK_API_KEY=sk-xxx
-python scripts/10_eval_models.py --deepseek \
-    --data_path data/demo_100.jsonl --limit 100
-
-# Or any OpenAI-compatible endpoint
-python scripts/10_eval_models.py --custom_api \
-    --api_key sk-xxx --base_url https://api.deepseek.com/v1 \
-    --api_model_id deepseek-chat --api_display_name MyModel \
-    --data_path data/demo_100.jsonl --limit 100
-```
-
-### Full evaluation (all data)
-
-The default data path is `data/linteval_lite_test.jsonl` (the 498-sample test set):
-
-```bash
-python scripts/10_eval_models.py --model_name Qwen2.5-Coder-7B --model_path /path/to/model --gpu 0
-python scripts/10_eval_models.py --deepseek          # API model, all 498 samples
-python scripts/10_eval_models.py --custom_api --api_key sk-xxx --base_url ... --api_model_id ... 
-```
-
-To evaluate on the **full 13,061-sample dataset**, first merge the three shards
-(they are line-aligned and byte-identical to the original file):
-
-```bash
-python scripts/split_dataset.py --merge
-# or: cat data/linteval_full.jsonl.part{1,2,3} > data/linteval_full.jsonl
-```
-
-Then run:
-
-```bash
-python scripts/10_eval_models.py --model_name Qwen2.5-Coder-7B --model_path /path/to/model \
-    --data_path data/linteval_full.jsonl
-```
-
-Key options of `10_eval_models.py`:
-
-| Option | Meaning |
-|---|---|
-| `--model_name` / `--model_path` | local model to evaluate via vLLM |
-| `--deepseek` | DeepSeek API (uses `DEEPSEEK_API_KEY`, `DEEPSEEK_BASE_URL`, `DEEPSEEK_MODEL` env vars) |
-| `--custom_api` | any OpenAI-compatible API (`--api_key/--base_url/--api_model_id/--api_display_name`) |
-| `--data_path` | override the evaluation dataset (default: `data/linteval_lite_test.jsonl`) |
-| `--limit N` | evaluate only the first N samples (e.g. `--limit 100`) |
-| `--gpu` | `CUDA_VISIBLE_DEVICES` for vLLM |
-| `--tp` | tensor-parallel size for vLLM |
-| `--no_message` | ablation: prompt without linter messages |
-| `--skip_baseline` | reuse an existing `eval_results/baseline.json` |
-| `--resume_failed` | re-run only API-generation failures from an existing result file |
-
-Results are written to `eval_results/{model_name}.json` (per-sample results + summary).
-
-### Regenerate paper tables
-
-```bash
-python scripts/11_gen_paper_excel.py
-```
-
-Reads `eval_results/` and writes LaTeX tables to `docs/table/`.
-
-## Reproducing the released results
-
-The released `eval_results/*.json` were produced with greedy decoding (temperature 0.0, max 4,096 tokens). External tool versions slightly affect linter diagnostics; see the paper for the exact versions (clang-tidy 22.1, PMD 7.12.0, pylint 4.0.5, g++ 13.3/15.2, OpenJDK 21/23).
-
-## Dataset construction (optional)
-
-The full construction pipeline (CodeContests+ → candidates → linter messages → LLM revisions → validation → split) is provided in `scripts/01_build_candidates.py` … `scripts/04_validate_revisions.py`. The released splits are included in `data/`; you only need these scripts to rebuild from scratch.
-
-## License & data
-
-Code is MIT licensed (see [LICENSE](LICENSE)). The benchmark data is derived from CodeContests+ (based on Codeforces problems) and is released for research purposes; cite the original [CodeContests](https://github.com/deepmind/code_contests) dataset as well.
+Code is MIT licensed ([LICENSE](LICENSE)). The benchmark data derives from
+[CodeContests+](https://github.com/deepmind/code_contests) (based on Codeforces problems) and is
+released for research purposes; please cite CodeContests alongside LintEval. The reference
+revisions were generated by DeepSeek-v3.2 through an OpenAI-compatible API.
 
 ## Citation
-
-If you find LintEval useful, please consider citing our paper once it is published:
 
 ```bibtex
 @inproceedings{linteval2026,
@@ -208,4 +321,4 @@ If you find LintEval useful, please consider citing our paper once it is publish
 }
 ```
 
-(We will update this entry with the final venue, authors, and DOI after acceptance.)
+We will update this entry with the final venue, authors, and DOI after acceptance.

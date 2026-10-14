@@ -5,8 +5,11 @@
 # Usage:
 #   source setup_env.sh
 #
-# Set DEEPSEEK_API_KEY (and optionally DEEPSEEK_BASE_URL / DEEPSEEK_MODEL)
-# before sourcing if you plan to evaluate API models.
+# API credentials are read from the environment when you evaluate a hosted model:
+#   pku_maas_base_url / PKU_MAAS_BASE_URL     e.g. https://chat.pku.edu.cn/v1
+#   pku_maas_api_key  / PKU_MAAS_API_KEY
+#   pku_maas_model_name / PKU_MAAS_MODEL_NAME e.g. gpt-6-luna
+#   DEEPSEEK_API_KEY / CUSTOM_API_KEY / CUSTOM_BASE_URL also supported (see README)
 
 # Resolve the directory of this script (repo root) regardless of CWD.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -35,5 +38,6 @@ echo "  PMD:         ${PMD_BIN}"
 echo "  pylint:      ${PYLINT_BIN}"
 echo "  javac:       ${JAVAC_BIN}"
 echo "  TESTLIB:     ${TESTLIB_INCLUDE}"
+echo "  PKU MaaS key:    $([ -n "${PKU_MAAS_API_KEY}${pku_maas_api_key}" ] && echo 'set' || echo 'not set (needed only for API models)')"
 echo "  DEEPSEEK_API_KEY: $([ -n "${DEEPSEEK_API_KEY}" ] && echo 'set' || echo 'not set (needed only for API models)')"
 echo "========================================"

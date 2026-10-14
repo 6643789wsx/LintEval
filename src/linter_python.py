@@ -2,6 +2,7 @@
 linter_python.py -- Python linter (pylint) wrapper.
 """
 
+import sys
 import subprocess
 import json
 import os
@@ -11,6 +12,25 @@ import tempfile
 import ast
 from typing import List, Dict, Optional
 from pathlib import Path
+
+_MISSING_BINARY_WARNED = False
+
+
+def _warn_missing_binary() -> None:
+    """Warn once (not per sample) when the linter binary cannot be executed.
+
+    Without this, a missing pylint silently yields zero alerts for every sample,
+    which would silently corrupt the reported metrics.
+    """
+    global _MISSING_BINARY_WARNED
+    if not _MISSING_BINARY_WARNED:
+        _MISSING_BINARY_WARNED = True
+        print(
+            "WARNING: pylint could not be executed (set PYLINT_BIN or put it on PATH). "
+            "Linter messages will be EMPTY for this language.",
+            file=sys.stderr,
+        )
+
 
 PYLINT_BIN = os.environ.get("PYLINT_BIN") or shutil.which("pylint") or "pylint"
 
@@ -181,6 +201,7 @@ def run_pylint(code: str, disable: str = PYLINT_DISABLE, timeout: int = 30) -> L
     except subprocess.TimeoutExpired:
         return []
     except FileNotFoundError:
+        _warn_missing_binary()
         return []
     finally:
         try:
