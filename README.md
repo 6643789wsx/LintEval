@@ -20,7 +20,8 @@ generators/checkers, so correctness is verified by actually running the code.
 ## Quickstart
 
 ```bash
-git clone <this-repo> && cd LintEval
+git clone https://gh-proxy.com/https://github.com/6643789wsx/LintEval.git && cd LintEval
+# or: git clone https://github.com/6643789wsx/LintEval.git && cd LintEval
 bash scripts/setup.sh                   # venv + deps + tool check  (or: make setup)
 
 # credentials for any OpenAI-compatible endpoint (PKU MaaS shown here)
