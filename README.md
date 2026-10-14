@@ -1,3 +1,5 @@
+> **Accepted at EMNLP 2026 Findings** — *LintEval: Benchmarking LLMs on Linter-Guided File Refactoring*.
+
 # LintEval: Linter-Guided Code Refactoring Benchmark
 
 [![Dataset on HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-deepbreath7%2FLintEval-yellow)](https://huggingface.co/datasets/deepbreath7/LintEval)
