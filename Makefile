@@ -1,18 +1,23 @@
 # LintEval — common entry points.  `make help` lists everything.
-PY        ?= python3
+# Prefer the virtualenv created by `make setup`, so the dependencies installed there
+# are the ones actually used (override with `make PY=python3 ...`).
+PY        ?= $(shell if [ -x .venv/bin/python ]; then echo .venv/bin/python; else echo python3; fi)
 MODEL     ?= gpt-6-luna
 BASE_URL  ?= $(pku_maas_base_url)
 DATA      ?= lite/linteval_lite.jsonl
 LIMIT     ?= 0
 WORKERS   ?= 4
 
-.PHONY: help setup check sanity smoke demo eval-lite eval-full merge-full tables verify clean
+.PHONY: help setup PY_SEL check sanity smoke demo eval-lite eval-full merge-full tables verify clean
 
 help:  ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
 setup:  ## create .venv, install requirements and check system tools
 	bash scripts/setup.sh
+
+PY_SEL:  ## print the interpreter the other targets will use
+	@echo $(PY)
 
 check:  ## verify packages, system tools and repository layout
 	$(PY) scripts/test_environment.py
