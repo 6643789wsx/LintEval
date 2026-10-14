@@ -33,6 +33,13 @@ python scripts/smoke_test.py            # 1 sample, full pipeline, ~30 s
 
 `scripts/setup.sh` never needs root: it creates `.venv`, installs `requirements.txt`,
 checks the system tools and prints ready-to-paste install commands for anything missing.
+`requirements.txt` lists the supported dependency ranges; `requirements.lock.txt` pins the exact
+versions that were verified end-to-end (clone → `make setup` → `make check/sanity/verify` →
+`make smoke`). Use the lock file when you need a reproducible environment:
+
+```bash
+pip install -r requirements.lock.txt    # exact verified versions
+```
 Only `pylint` is required for the Python smoke; add `clang-tidy` (C++), PMD + `javac`
 (Java) and `g++` when you evaluate those languages.
 
