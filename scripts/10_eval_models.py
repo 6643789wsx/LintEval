@@ -24,6 +24,7 @@ import json
 import os
 import sys
 import tempfile
+import threading
 import time
 from collections import Counter
 from difflib import SequenceMatcher
@@ -755,11 +756,22 @@ def _find_api_generation_failures(existing_results: List[Dict]) -> List[int]:
     return failed
 
 
+_WRITE_LOCK = threading.Lock()
+
+
 def _atomic_write_json(path: Path, obj: Any) -> None:
-    tmp = path.with_suffix(path.suffix + ".tmp")
-    with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(obj, f, ensure_ascii=False, indent=2)
-    os.replace(tmp, path)
+    """Write JSON atomically.
+
+    The API evaluator calls this from several worker threads, so the temporary file
+    must be unique per writer and the rename must be serialized; otherwise one thread
+    can rename another thread's temporary file away (``FileNotFoundError``) and the
+    cache silently loses entries, which breaks resume-after-failure.
+    """
+    with _WRITE_LOCK:
+        tmp = path.with_name(f"{path.name}.{os.getpid()}.{threading.get_ident()}.tmp")
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(obj, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, path)
 
 
 # ============================================================

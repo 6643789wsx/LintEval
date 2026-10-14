@@ -22,5 +22,8 @@ logs/
 full/linteval_full.jsonl
 
 # Smoke-test artifacts (local only)
-eval_results/_smoke_input.jsonl
+eval_results/_*
 eval_results/smoke_*.json
+
+# Example demo runs (not paper results)
+# eval_results/demo_*.json are kept on purpose

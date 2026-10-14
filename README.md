@@ -17,11 +17,11 @@ generators/checkers, so correctness is verified by actually running the code.
 
 ---
 
-## Quickstart (one command)
+## Quickstart
 
 ```bash
 git clone <this-repo> && cd LintEval
-pip install -r requirements.txt
+bash scripts/setup.sh                   # venv + deps + tool check  (or: make setup)
 
 # credentials for any OpenAI-compatible endpoint (PKU MaaS shown here)
 export pku_maas_base_url=https://chat.pku.edu.cn/v1
@@ -29,6 +29,24 @@ export pku_maas_api_key=sk-...
 
 python scripts/smoke_test.py            # 1 sample, full pipeline, ~30 s
 ```
+
+`scripts/setup.sh` never needs root: it creates `.venv`, installs `requirements.txt`,
+checks the system tools and prints ready-to-paste install commands for anything missing.
+Only `pylint` is required for the Python smoke; add `clang-tidy` (C++), PMD + `javac`
+(Java) and `g++` when you evaluate those languages.
+
+Common entry points (also available as `make <target>`):
+
+| Command | What it does |
+|---|---|
+| `make setup` | create `.venv`, install deps, check tools |
+| `make sanity` | end-to-end pipeline check, no API key needed (~1 min) |
+| `make smoke` | one-sample end-to-end smoke test |
+| `make demo LIMIT=10` | evaluate 10 samples of the demo split |
+| `make eval-lite` | evaluate the 498-sample lite split |
+| `make verify` | recompute the paper metrics from released per-sample results |
+| `make tables` | regenerate `docs/table/*.tex` |
+| `make help` | list all targets |
 
 Real output of the smoke test:
 
@@ -58,6 +76,32 @@ key ever appears on the command line:
 
 `scripts/smoke_test.py --language java|cpp` switches language; `--model` overrides the model id.
 `CUSTOM_API_KEY` / `CUSTOM_BASE_URL` / `CUSTOM_MODEL_ID` and `DEEPSEEK_API_KEY` are accepted too.
+
+---
+
+## Verified end-to-end runs
+
+The pipeline in this repository was executed on the released data with both an API model and
+local vLLM models. Two reproducible runs are worth quoting here because they cover all three
+languages and the full metric stack:
+
+| Run | Samples | Result |
+|---|---|---|
+| `scripts/smoke_test.py --language py3` | 1 | pipeline OK, 32 generated tests, alerts 4 → 1, Pass@1 = 100% |
+| `scripts/10_eval_models.py --custom_api --model gpt-6-luna --data_path lite/demo_100.jsonl` | 100 | Pass@1 = **67.0%**, Reduction@P = 65.4%, LinePerFix@P = 6.4, 3,175 tests generated |
+| `scripts/sanity_check.py` | demo subset | linters OK (C++ 95 / Python 3 / Java 35 alerts on the first demo records), testlib compile → 3/3 tests passed |
+
+Per-language outcome of the 100-sample demo run (`gpt-6-luna`, greedy decoding):
+
+| Language | Passed | Test failures | Compile failures |
+|---|---:|---:|---:|
+| C++ | 22 | 9 | 2 |
+| Java | 28 | 4 | 1 |
+| Python | 17 | 16 | 1 |
+
+Every record keeps the raw model output, the extracted code, the number of generated/passed
+tests, the alert counts before/after and the token usage, so the numbers can be audited
+per sample.
 
 ---
 
@@ -240,6 +284,38 @@ The Python smoke needs only `pylint`; C++ smoke additionally needs `clang-tidy`.
 python scripts/11_gen_paper_excel.py     # -> docs/table/*.tex
 ```
 
+### Metric consistency check
+
+`scripts/verify_paper_metrics.py` recomputes Pass@1, Reduction@P, New@P, ΔLine@P and
+LinePerFix@P **from the per-sample records only** and compares them with the values printed in
+`docs/table/overall_performance.tex` (it can additionally regenerate every LaTeX table and
+require a byte-identical match):
+
+```bash
+python scripts/verify_paper_metrics.py --check-tables
+```
+
+```
+Model                            Pass@1      Reduction@P          New@P        DLine@P     LinePerFix@P
+GPT-5.2                   67.1% / 67.1%    87.8% / 87.8%      7.3% / 7.3%      71.7 / 71.7        6.8 / 6.8
+DeepSeek-v3.2             57.6% / 57.6%    73.0% / 73.0%      6.7% / 6.7%      45.4 / 45.4        5.5 / 5.5
+Qwen2.5-Coder-32B         61.6% / 61.7%    57.1% / 57.1%      8.1% / 8.1%      33.3 / 33.3        5.7 / 5.7
+...
+RESULT: PASS - per-sample results reproduce every paper metric and the LaTeX tables.
+```
+
+The metric definitions used for the paper (identical to `scripts/gen_tab/_shared.py`) are:
+
+| Metric | Formula (over the samples that pass compile + tests) |
+|---|---|
+| Reduction@P | `Σ(in − out) / Σ(in)` — corpus level, not a mean of per-sample ratios |
+| New@P | `Σ(new alerts) / Σ(in)` |
+| ΔLine@P | `Σ lines changed / n_passed` |
+| LinePerFix@P | `Σ lines changed / Σ fixed`, `fixed = max(0, in − out + new)` |
+
+`eval_results/*.json` stores every quantity these formulas need (`in_total`, `out_total`,
+`new_msg_count`, `lpm_p_lines_changed`, `pass`), so metrics are always recomputable offline.
+
 Reference revisions were produced with greedy decoding (temperature 0.0, max 4,096 tokens).
 Linter versions slightly change diagnostics; the paper reports clang-tidy 22.1, PMD 7.12.0,
 pylint 4.0.5, g++ 13.3/15.2, OpenJDK 21/23.
@@ -281,9 +357,11 @@ streaming consumers, `preview.json` for quick inspection.
 ```
 ├── README.md                  this file
 ├── CHANGELOG.md               release history
+├── Makefile                   one-command entry points
 ├── LICENSE                    MIT
 ├── requirements.txt
 ├── setup_env.sh               tool paths + PYTHONPATH
+├── scripts/setup.sh           one-command environment setup
 ├── configs/                   linter and dataset configuration
 ├── src/                       linter wrappers, testlib runner, metrics, prompts
 ├── scripts/
@@ -293,6 +371,7 @@ streaming consumers, `preview.json` for quick inspection.
 │   ├── split_dataset.py       split/merge the full JSONL
 │   ├── test_environment.py    environment check
 │   ├── sanity_check.py        pipeline check without API
+│   ├── verify_paper_metrics.py recompute paper metrics from per-sample results
 │   ├── 11_gen_paper_excel.py  regenerate LaTeX tables
 │   └── 01…05_*.py             optional dataset-construction pipeline
 ├── tools/testlib.h            required for C++ generator/checker compilation

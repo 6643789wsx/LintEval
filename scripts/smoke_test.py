@@ -126,9 +126,18 @@ def main() -> int:
           f"(new: {entry.get('new_msg_count')})")
     print(f"  pass@1           : {summary.get('pass@1')}")
     print(f"  MRR@P            : {summary.get('avg_mrr_at_pass')}")
-    ok = completed.returncode == 0 and entry.get("pass") is not None
+    # The smoke test checks the *pipeline*, not the model: a sample that fails the
+    # unit tests is a legitimate model result, as long as the pipeline completed.
+    pipeline_ok = completed.returncode == 0 and entry.get("pass") is not None
     print("=" * 64)
-    print("SMOKE TEST PASSED" if ok else "SMOKE TEST FAILED (see output above)")
+    if not pipeline_ok:
+        print("SMOKE TEST FAILED - the pipeline did not complete (see output above)")
+    elif entry.get("pass"):
+        print("SMOKE TEST PASSED - pipeline healthy and the sample passed the tests")
+    else:
+        print("PIPELINE OK - evaluation completed end-to-end, and this sample failed")
+        print("              the unit tests (pass=False), which is a valid model result")
+    ok = pipeline_ok
     if not args.keep_input and smoke_input.exists():
         smoke_input.unlink()
     return 0 if ok else 1
