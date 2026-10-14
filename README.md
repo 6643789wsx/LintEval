@@ -1,5 +1,7 @@
 # LintEval: Linter-Guided Code Refactoring Benchmark
 
+[![Dataset on HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-deepbreath7%2FLintEval-yellow)](https://huggingface.co/datasets/deepbreath7/LintEval)
+
 **Can a model fix the warnings a linter reports without breaking the code?**
 
 LintEval is a multi-language benchmark for *linter-guided refactoring*: each sample is a
@@ -14,6 +16,11 @@ messages and (2) still compiles and passes every generated unit test.
 
 Samples are derived from CodeContests+ (Codeforces problems) with testlib-based
 generators/checkers, so correctness is verified by actually running the code.
+
+The datasets are also published on HuggingFace:
+**https://huggingface.co/datasets/deepbreath7/LintEval** — `lite`, `demo` and `full` configs
+(JSONL + Parquet), together with the released per-sample results (`eval_results/`) and the
+paper tables (`docs/table/`).
 
 ---
 
