@@ -32,7 +32,26 @@ def _warn_missing_binary() -> None:
         )
 
 
-PYLINT_BIN = os.environ.get("PYLINT_BIN") or shutil.which("pylint") or "pylint"
+def _resolve_pylint() -> str:
+    """Locate pylint: env override, then PATH, then the running interpreter's own bin/.
+
+    pylint is the only pip-installable linter, so it usually lives next to the Python
+    that runs the benchmark (e.g. ``<repo>/.venv/bin/pylint``).  Falling back to that
+    directory lets ``./.venv/bin/python scripts/...`` work without activating the venv.
+    """
+    override = os.environ.get("PYLINT_BIN")
+    if override:
+        return override
+    found = shutil.which("pylint")
+    if found:
+        return found
+    beside_interpreter = Path(sys.executable).parent / "pylint"
+    if beside_interpreter.exists():
+        return str(beside_interpreter)
+    return "pylint"
+
+
+PYLINT_BIN = _resolve_pylint()
 
 # Category mapping: pylint native types → topic-based cross-language categories
 # Error-prone / Performance / Refactor / Style / Other

@@ -82,9 +82,12 @@ cat <<EOF
 Next steps
 ----------
   source setup_env.sh                 # exports tool paths + PYTHONPATH
-  python scripts/sanity_check.py      # 1-minute pipeline check, no API needed
+  $PY scripts/sanity_check.py         # 1-minute pipeline check, no API needed
   export pku_maas_base_url=https://chat.pku.edu.cn/v1
   export pku_maas_api_key=sk-...
-  python scripts/smoke_test.py        # one-sample end-to-end smoke (gpt-6-luna)
-  python scripts/verify_paper_metrics.py --check-tables
+  $PY scripts/smoke_test.py           # one-sample end-to-end smoke (gpt-6-luna)
+  $PY scripts/verify_paper_metrics.py --check-tables
+
+(\$PY = the interpreter that has the dependencies installed; \`source .venv/bin/activate\`
+works too.)
 EOF

@@ -3,12 +3,13 @@
 import subprocess
 import json
 import os
+import shutil
 import re
 import tempfile
 from typing import List, Dict, Optional
 
 # Ruff binary
-RUFF_BIN = os.environ.get("RUFF_BIN", "/opt/anaconda3/bin/ruff")
+RUFF_BIN = os.environ.get("RUFF_BIN") or shutil.which("ruff") or "ruff"
 
 # Version pinned for reproducibility
 RUFF_VERSION = "0.12.0"
